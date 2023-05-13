@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Role from './domain/models/Role.js';
 
 const secret = "$2b$10$OstRst1LWEfDyKEGdKcOKO";
 
@@ -21,8 +22,8 @@ const verifyJwt = (token) => {
   return jwt.verify(token, secret);
 };
 
-const getRoleIdByName = async (knex, roleName) => {
-  const role = await knex('roles').where({ name: roleName }).first();
+const getRoleIdByName = async (roleName) => {
+  const role = await Role.find({ name: roleName }).first();
   return role ? role.id : null;
 };
 

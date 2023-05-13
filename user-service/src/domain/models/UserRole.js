@@ -4,10 +4,6 @@ const UserRole = model({
     tableName: 'user_roles',
 });
 
-UserRole.create = (userId, roleId) => {
-    return UserRole.query().insert({ user_id: userId, role_id: roleId });
-};
-
 UserRole.findByUserId = (userId) => {
     return UserRole.query().where('user_id', userId);
 };

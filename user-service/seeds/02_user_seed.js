@@ -49,7 +49,7 @@ export async function seed (knex) {
       const userRoles = users.find(({ name }) => name === user.name).roles;
       await Promise.all(
         userRoles.map(async (roleName) => {
-          const roleId = await getRoleIdByName(knex, roleName);
+          const roleId = await getRoleIdByName(roleName);
           seededUserRole.push({ user_id: user.id, role_id: roleId });
         })
       );

@@ -1,16 +1,8 @@
-import { hashPassword } from "../../utils.js"
-
 export default (usecase) => {
     const controller = {
         register: async (req, res) => {
             try {
-                const body = {
-                    name: req.body.name,
-                    email: req.body.email,
-                    password: hashPassword(req.body.password),
-                    phone: req.body.phone,
-                }
-                await usecase.register(body)
+                await usecase.register(req.body)
                 res.status(200).json({
                     message: "success"
                 })

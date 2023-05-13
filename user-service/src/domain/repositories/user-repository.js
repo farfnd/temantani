@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import UserRole from '../models/UserRole.js';
 
 export default () => {
     const selectProps = [ 'id', 'email', 'name', 'phone' ];
@@ -9,7 +10,6 @@ export default () => {
         getUserById: async (id) => {
             const user = await User.find({ id }).select(selectProps).first();
             const roles = await User.getUserRoles(id);
-            console.log(roles);
             user.roles = roles.map(role => role.name);
             return user;
         },
@@ -19,7 +19,8 @@ export default () => {
         updateUser: (id, body) => {
             return User.update(id, body);
         },
-        deleteUser: (id) => {
+        deleteUser: async (id) => {
+            await UserRole.deleteByUserId(id);
             return User.destroy(id);
         }
     };

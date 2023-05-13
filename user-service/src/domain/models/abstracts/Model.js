@@ -9,8 +9,7 @@ export default ({
 
     const create = props => {
         const { id, ...restProps } = props;
-        return query().insert(restProps)
-            .returning(selectableProps)
+        return query().insert(restProps, selectableProps)
             .timeout(timeout);
     };
 
@@ -27,9 +26,8 @@ export default ({
 
     const update = (id, props) => {
         const { id: _, ...restProps } = props;
-        return query().update(restProps)
+        return query().update(restProps, selectableProps)
             .where({ id })
-            .returning(selectableProps)
             .timeout(timeout);
     };
 
