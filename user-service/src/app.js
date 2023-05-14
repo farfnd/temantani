@@ -10,9 +10,9 @@ const kafka = require("kafka-node");
 const client = new kafka.KafkaClient({ kafkaHost: process.env.KAFKA_BOOTSTRAP_SERVERS });
 const producer = new kafka.Producer(client);
 
-producer.on("ready", () => {
-    console.log("Kafka producer is ready");
-});
+// producer.on("ready", () => {
+//     console.log("Kafka producer is ready");
+// });
 
 const eventPublisher = new EventPublisher(producer);
 

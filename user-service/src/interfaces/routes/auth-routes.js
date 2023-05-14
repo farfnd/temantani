@@ -3,7 +3,7 @@ const { express, controllers, repositories, useCases } = require('./abstracts/co
 const router = express.Router();
 
 module.exports = function(app, eventPublisher) {
-    const authRepo = repositories.authRepository(eventPublisher)
+    const authRepo = repositories.authRepository()
     const authUseCase = useCases.authUseCases(authRepo)
     const authController = controllers.authController(authUseCase)
     

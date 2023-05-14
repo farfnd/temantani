@@ -30,11 +30,17 @@ module.exports = (eventPublisher) => {
                 await UserRoles.bulkCreate(userRoles.filter(Boolean));
             }
 
-            const user = await User.findByPk(createdUser.id, { include: [Role] }); // Get user with roles
+            let user;
+            try {
+                user = await User.findByPk(createdUser.id, { include: 'roles' }); // Get user with roles
+                console.log(user);
+            } catch (error) {
+                throw error;
+            }
 
             // Raise the UserRegistered domain event
-            const userRegisteredEvent = new UserRegistered(user);
-            eventPublisher.publish(userRegisteredEvent);
+            // const userRegisteredEvent = new UserRegistered(user);
+            // eventPublisher.publish(userRegisteredEvent);
         },
         login: async (email, password) => {
             try {
