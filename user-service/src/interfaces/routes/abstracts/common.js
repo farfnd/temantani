@@ -1,5 +1,5 @@
 const express = require('express');
-const authMiddleware = require('../../../application/middleware/auth.js');
+const middlewares = require('../../../application/middleware/index.js');
 
 const repositories = require("../../../domain/repositories/index.js");
 const useCases = require("../../../application/use-cases/index.js");
@@ -10,5 +10,5 @@ module.exports = {
   controllers,
   repositories,
   useCases,
-  authMiddleware
+  middlewares
 };

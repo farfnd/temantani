@@ -17,8 +17,8 @@ fs.readdirSync(__dirname)
     })
     .forEach(file => {
         const name = camelCase(file.split('.')[0]); // Convert filename to camelCase
-        const useCase = require(path.join(__dirname, file));
-        files[name] = useCase;
+        const middleware = require(path.join(__dirname, file));
+        files[name] = middleware;
     });
 
 module.exports = files;

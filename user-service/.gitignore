@@ -1,2 +1,23 @@
-node_modules
-dev.sqlite3
+# Dependency directories
+/node_modules
+
+# Environment variables file
+/.env
+
+# Compiled output
+/dist
+/build
+
+# Log files
+/logs
+
+# Editor/IDE files
+.idea
+.vscode
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Other generated files
+*.log

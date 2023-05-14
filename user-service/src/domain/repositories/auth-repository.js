@@ -42,11 +42,14 @@ module.exports = (eventPublisher) => {
         },
         login: async (email, password) => {
             try {
-                const user = await User.findOne({ where: { email } });
+                const user = await User.findOne({ where: { email }, include: 'roles' });
 
                 if (user && comparePassword(password, user.password)) {
                     return {
-                        accessToken: generateJwt({ id: user.id }),
+                        accessToken: generateJwt({ 
+                            id: user.id,
+                            roles: user.roles.map(role => role.name)
+                        }),
                     };
                 } else {
                     throw new Error("Authentication Failed");

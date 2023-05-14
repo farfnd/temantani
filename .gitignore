@@ -1,2 +1,6 @@
-.env
 data/
+.env
+*/.env
+*/node_modules
+*/dev.sqlite3
+*/.DS_Store

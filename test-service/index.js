@@ -9,7 +9,7 @@ const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
 const kafkaTopic = process.env.KAFKA_TOPIC;
 
 const client = new kafka.KafkaClient({ kafkaHost: kafkaBootstrapServer });
-const consumer = new kafka.Consumer(client, [{ topic: kafkaTopic }], { autoCommit: false });
+const consumer = new kafka.Consumer(client, [{ topic: kafkaTopic }]);
 
 consumer.on("ready", () => {
     console.log("Kafka consumer is ready");
