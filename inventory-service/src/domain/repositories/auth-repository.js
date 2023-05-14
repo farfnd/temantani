@@ -1,36 +1,62 @@
-import { comparePassword, generateJwt } from "../../utils.js";
-import User from "../models/User.js";
+const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
+const { User, Role, UserRoles } = require("../models/index.js");
+const UserRegistered = require("../events/user-registered.js");
 
-export default () => {
+module.exports = (eventPublisher) => {
     const repository = {
-        register: (body) => {
-            return User.create(body);
-        },
-        login: (email, password) => {
-            return new Promise((resolve, reject) => {
-                User.find({ email })
-                    .first()
-                    .then((data) => {
-                        if (data) {
-                            if (comparePassword(password, data.password)) {
-                                resolve({
-                                    accessToken: generateJwt({ id: data.id }),
-                                });
-                            } else {
-                                reject({
-                                    message: "Authentication Failed",
-                                });
-                            }
-                        } else {
-                            reject({
-                                message: "Authentication Failed",
-                            });
+        register: async (body) => {
+            const { roles, ...userBody } = body; // Extract roles from request body
+            userBody.password = hashPassword(userBody.password); // Hash password
+
+            let createdUser;
+            try {
+                createdUser = await User.create(userBody); // Create user without roles
+            } catch (error) {
+                throw error;
+            }
+
+            // Add user roles if roles array is provided
+            if (roles && Array.isArray(roles)) {
+                const userRoles = await Promise.all(
+                    roles.map(async (role) => {
+                        const foundRole = await Role.findOne({ where: { name: role } });
+                        if (foundRole) {
+                            return { userId: createdUser.id, roleId: foundRole.id };
                         }
                     })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
+                );
+
+                await UserRoles.bulkCreate(userRoles.filter(Boolean));
+            }
+
+            let user;
+            try {
+                user = await User.findByPk(createdUser.id, { include: 'roles' }); // Get user with roles
+            } catch (error) {
+                throw error;
+            }
+
+            // Raise the UserRegistered domain event
+            const userRegisteredEvent = new UserRegistered(user);
+            eventPublisher.publish(userRegisteredEvent);
+        },
+        login: async (email, password) => {
+            try {
+                const user = await User.findOne({ where: { email }, include: 'roles' });
+
+                if (user && comparePassword(password, user.password)) {
+                    return {
+                        accessToken: generateJwt({ 
+                            id: user.id,
+                            roles: user.roles.map(role => role.name)
+                        }),
+                    };
+                } else {
+                    throw new Error("Authentication Failed");
+                }
+            } catch (error) {
+                throw error;
+            }
         },
     };
 

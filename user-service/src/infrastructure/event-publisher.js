@@ -1,24 +1,21 @@
-module.exports = class EventPublisher {
-    constructor(kafkaProducer) {
-        this.kafkaProducer = kafkaProducer;
+class EventPublisher {
+    constructor(kafkaService) {
+        this.kafkaService = kafkaService;
     }
 
     async publish(event) {
-        console.log('Publishing event to Kafka');
-        const message = {
-            topic: 'user-topic',
-            messages: [JSON.stringify(event)],
-        };
+        console.log("Publishing event to Kafka");
+        const message = JSON.stringify(event);
+        const topic = "user-topic";
 
         try {
-            this.kafkaProducer.send([message], (err, data) => {
-                if (err) {
-                    throw err;
-                }
-                console.log('Message sent successfully:', data);
-            });
+            this.kafkaService.publishMessage(topic, message);
+            console.log("Event published successfully");
         } catch (error) {
+            console.error("Error publishing event:", error);
             throw error;
         }
     }
-};
+}
+
+module.exports = EventPublisher;

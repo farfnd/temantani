@@ -1,30 +1,26 @@
-import express, { json } from "express";
-const app = express()
-const port = process.env.PORT || 4001;
-import cors from 'cors';
-import routes from './interfaces/routes/index.js';
-import kafka from 'kafka-node';
-import User from './domain/models/User.js';
+const express = require('express');
+const kafka = require('kafka-node');
+const app = express();
+app.use(express.json());
 
-const client = new kafka.KafkaClient({ kafkaHost: process.env.KAFKA_BOOTSTRAP_SERVERS });
-const consumer = new kafka.Consumer(client, [{ topic: process.env.KAFKA_TOPIC }], { autoCommit: false });
+require('dotenv').config();
+const port = process.env.PORT || 3000;
+const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
+const kafkaTopic = process.env.KAFKA_TOPIC;
 
+const client = new kafka.KafkaClient({ kafkaHost: kafkaBootstrapServer });
+const consumer = new kafka.Consumer(client, [{ topic: kafkaTopic }]);
+
+consumer.on("ready", () => {
+    console.log("Kafka consumer is ready");
+});
 consumer.on('message', async (message) => {
-    const user = new User.create(JSON.parse(message.value));
-    await user.save();
+    console.log('Received message:', message);
 });
 consumer.on('error', (err) => {
     console.log(err);
 });
 
-app.use(cors())
-app.use(json())
-app.get("/", (req, res)=>{
-    res.send("Hello World")
-})
-
-routes(app)
-
-app.listen(port, ()=>{
-    console.log(`server running at http://localhost:${port}`)
+app.listen(port, () => {
+    console.log('Listening on port 3000');
 })
