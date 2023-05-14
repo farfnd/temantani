@@ -1,7 +1,7 @@
-import userUseCases from "./user-use-cases.js";
-import authUseCases from "./auth-use-cases.js";
+const userUseCases = require('./user-use-cases');
+const authUseCases = require('./auth-use-cases');
 
-export default {
+module.exports = {
     userUseCases,
     authUseCases,
 };

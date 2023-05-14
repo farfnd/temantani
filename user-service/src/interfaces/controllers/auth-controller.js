@@ -1,4 +1,4 @@
-export default (usecase) => {
+module.exports = (usecase) => {
     const controller = {
         register: async (req, res) => {
             try {
@@ -21,4 +21,4 @@ export default (usecase) => {
     };
 
     return controller;
-}
+};

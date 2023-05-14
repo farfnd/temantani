@@ -1,8 +1,14 @@
-import express from 'express';
-import authMiddleware from '../../../application/middleware/auth.js';
+const express = require('express');
+const authMiddleware = require('../../../application/middleware/auth.js');
 
-import repositories from "../../../domain/repositories/index.js";
-import useCases from "../../../application/use-cases/index.js";
-import controllers from '../../controllers/index.js';
+const repositories = require("../../../domain/repositories/index.js");
+const useCases = require("../../../application/use-cases/index.js");
+const controllers = require('../../controllers/index.js');
 
-export { express, controllers, repositories, useCases, authMiddleware };
+module.exports = {
+  express,
+  controllers,
+  repositories,
+  useCases,
+  authMiddleware
+};

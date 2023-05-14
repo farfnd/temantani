@@ -1,4 +1,4 @@
-export default class UserRegistered {
+class UserRegistered {
     constructor(user) {
         this.userId = user.userId;
         this.name = user.name;
@@ -6,3 +6,5 @@ export default class UserRegistered {
         this.roles = user.roles;
     }
 }
+
+module.exports = UserRegistered;

@@ -2,7 +2,6 @@
   "name": "user-service",
   "version": "1.0.0",
   "main": "./src/app.js",
-  "type": "module",
   "author": "FARHAN",
   "license": "MIT",
   "dependencies": {

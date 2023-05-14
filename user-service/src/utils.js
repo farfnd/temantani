@@ -1,6 +1,5 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import Role from './domain/models/Role.js';
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const secret = "$2b$10$OstRst1LWEfDyKEGdKcOKO";
 
@@ -22,9 +21,4 @@ const verifyJwt = (token) => {
   return jwt.verify(token, secret);
 };
 
-const getRoleIdByName = async (roleName) => {
-  const role = await Role.find({ name: roleName }).first();
-  return role ? role.id : null;
-};
-
-export { hashPassword, comparePassword, generateJwt, verifyJwt, getRoleIdByName };
+module.exports = { hashPassword, comparePassword, generateJwt, verifyJwt };

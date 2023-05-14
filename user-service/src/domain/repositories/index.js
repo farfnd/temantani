@@ -1,7 +1,7 @@
-import userRepository from "./user-repository.js";
-import authRepository from "./auth-repository.js";
+const userRepository = require('./user-repository.js');
+const authRepository = require('./auth-repository.js');
 
-export default {
+module.exports = {
     userRepository,
     authRepository,
 };

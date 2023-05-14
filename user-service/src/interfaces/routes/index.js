@@ -1,9 +1,9 @@
-import authRoutes from './auth-routes.js';
-import customRoutes from './custom-routes.js';
-import userRoutes from './user-routes.js';
+const authRoutes = require('./auth-routes.js');
+const customRoutes = require('./custom-routes.js');
+const userRoutes = require('./user-routes.js');
 
-export default (app, eventPublisher) => {
+module.exports = function (app, eventPublisher) {
     authRoutes(app, eventPublisher);
     customRoutes(app);
     userRoutes(app);
-}
+};

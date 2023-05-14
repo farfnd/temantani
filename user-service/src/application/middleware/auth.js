@@ -1,14 +1,15 @@
-import { verifyJwt } from "../../utils.js"
-export default(req, res, next)=>{
+const { verifyJwt } = require("../../utils.js");
+
+module.exports = function(req, res, next) {
     try {
-        const token = req.headers.authorization.split(' ')[1]
-        const decoded = verifyJwt(token)
-        req.user = decoded
-        next()
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = verifyJwt(token);
+        req.user = decoded;
+        next();
     } catch (error) {
-        res.statusCode = 403
+        res.statusCode = 403;
         res.send({
-            message:'Token not valid',
-        })
+            message: 'Token not valid',
+        });
     }
-}
+};

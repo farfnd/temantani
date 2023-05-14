@@ -1,25 +1,36 @@
-import User from '../models/User.js';
-import UserRole from '../models/UserRole.js';
+const models = require('../models/index.js');
 
-export default () => {
-    const selectProps = [ 'id', 'email', 'name', 'phone' ];
+module.exports = () => {
+    const selectProps = ['id', 'email', 'name', 'phone'];
+    const { User, Role, UserRoles } = models;
     const repository = {
         getAllUsers: () => {
-            return User.findAll().select(selectProps);
+            return User.findAll({
+                attributes: selectProps,
+            });
         },
         getUserById: (id) => {
-            return User.getWithUserRoles(id);
+            return User.findOne({
+                where: { id },
+                include: [{ model: UserRoles }],
+            });
         },
         createUser: (body) => {
             return User.create(body);
         },
         updateUser: (id, body) => {
-            return User.update(id, body);
+            return User.update(body, {
+                where: { id },
+            });
         },
         deleteUser: async (id) => {
-            await UserRole.deleteByUserId(id);
-            return User.destroy(id);
-        }
+            await UserRoles.destroy({
+                where: { userId: id },
+            });
+            return User.destroy({
+                where: { id },
+            });
+        },
     };
 
     return repository;

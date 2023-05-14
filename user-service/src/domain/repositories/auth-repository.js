@@ -1,65 +1,55 @@
-import { hashPassword, comparePassword, generateJwt, getRoleIdByName } from "../../utils.js";
-import User from "../models/User.js";
-import UserRole from "../models/UserRole.js";
-import UserRegistered from "../events/user-registered.js";
+const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
+const models = require("../models/index.js");
+const UserRegistered = require("../events/user-registered.js");
 
-export default (eventPublisher) => {
+module.exports = (eventPublisher) => {
+    const { User, Role, UserRoles } = models;
     const repository = {
         register: async (body) => {
             const { roles, ...userBody } = body; // Extract roles from request body
             userBody.password = hashPassword(userBody.password); // Hash password
+
+            let createdUser;
             try {
-                const [userId] = await User.create(userBody); // Create user without roles
+                createdUser = await User.create(userBody); // Create user without roles
             } catch (error) {
-                console.log(userBody)
-                console.log(error)
+                throw error;
             }
 
             // Add user roles if roles array is provided
             if (roles && Array.isArray(roles)) {
-                const userRoles = await Promise.all(roles.map(async role => {
-                    const roleId = await getRoleIdByName(role);
-                    return { user_id: userId, role_id: roleId };
-                }));
-                
-                userRoles.forEach(async userRole => {
-                    console.log(userRole)
-                    await UserRole.create(userRole);
-                });
+                const userRoles = await Promise.all(
+                    roles.map(async (role) => {
+                        const foundRole = await Role.findOne({ where: { name: role } });
+                        if (foundRole) {
+                            return { userId: createdUser.id, roleId: foundRole.id };
+                        }
+                    })
+                );
+
+                await UserRoles.bulkCreate(userRoles.filter(Boolean));
             }
 
-            const user = await User.getWithUserRoles(userId).first(); // Get user with roles
+            const user = await User.findByPk(createdUser.id, { include: [Role] }); // Get user with roles
 
             // Raise the UserRegistered domain event
             const userRegisteredEvent = new UserRegistered(user);
-            eventPublisher.publish(userRegisteredEvent);    
+            eventPublisher.publish(userRegisteredEvent);
         },
-        login: (email, password) => {
-            return new Promise((resolve, reject) => {
-                User.find({ email })
-                .first()
-                .then((data) => {
-                    if (data) {
-                            console.log(data)
-                            if (comparePassword(password, data.password)) {
-                                resolve({
-                                    accessToken: generateJwt({ id: data.id }),
-                                });
-                            } else {
-                                reject({
-                                    message: "Authentication Failed",
-                                });
-                            }
-                        } else {
-                            reject({
-                                message: "Authentication Failed",
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
+        login: async (email, password) => {
+            try {
+                const user = await User.findOne({ where: { email } });
+
+                if (user && comparePassword(password, user.password)) {
+                    return {
+                        accessToken: generateJwt({ id: user.id }),
+                    };
+                } else {
+                    throw new Error("Authentication Failed");
+                }
+            } catch (error) {
+                throw error;
+            }
         },
     };
 

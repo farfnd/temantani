@@ -1,4 +1,4 @@
-import { express, controllers, repositories, useCases, authMiddleware } from './abstracts/common.js';
+const { express, controllers, repositories, useCases, authMiddleware } = require('./abstracts/common.js');
 
 const router = express.Router();
 
@@ -14,6 +14,6 @@ router.post("/", userController.createUser);
 router.put("/:id", userController.updateUserById);
 router.delete("/:id", userController.deleteUserById);
 
-export default (app) => {
+module.exports = (app) => {
     app.use('/users', router);
 };

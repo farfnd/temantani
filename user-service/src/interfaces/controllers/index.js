@@ -1,7 +1,7 @@
-import userController from "./user-controller.js";
-import authController from "./auth-controller.js";
+const authController = require("./auth-controller.js");
+const userController = require("./user-controller.js");
 
-export default {
+module.exports = {
     authController,
     userController,
 };

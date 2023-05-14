@@ -1,4 +1,4 @@
-export default class EventPublisher {
+module.exports = class EventPublisher {
     constructor(kafkaProducer) {
         this.kafkaProducer = kafkaProducer;
     }
@@ -13,4 +13,4 @@ export default class EventPublisher {
 
         await this.kafkaProducer.send(message);
     }
-}
+};
