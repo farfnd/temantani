@@ -16,7 +16,7 @@ const eventPublisher = new EventPublisher(kafkaService);
 app.use(cors());
 app.use(json());
 app.get("/", (req, res) => {
-    res.send("Hello User Service");
+    res.send("Welcome to User Service");
 });
 
 routes(app, eventPublisher);

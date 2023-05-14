@@ -1,8 +1,7 @@
-const models = require('../models/index.js');
+const { User, Role, UserRoles } = require('../models/index.js');
 
 module.exports = () => {
     const selectProps = ['id', 'email', 'name', 'phone'];
-    const { User, Role, UserRoles } = models;
     const repository = {
         getAllUsers: () => {
             return User.findAll({

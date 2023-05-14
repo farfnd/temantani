@@ -1,7 +1,9 @@
 const express = require('express');
+const { json } = require("express");
 const kafka = require('kafka-node');
 const app = express();
-app.use(express.json());
+const cors = require("cors");
+const routes = require("./interfaces/routes/index.js");
 
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -21,6 +23,14 @@ consumer.on('error', (err) => {
     console.log(err);
 });
 
+app.use(cors());
+app.use(json());
+app.get("/", (req, res) => {
+    res.send("Welcome to Inventory Service");
+});
+
+routes(app);
+
 app.listen(port, () => {
-    console.log('Listening on port 3000');
+    console.log(`Inventory service listening at http://localhost:${port}`)
 })
