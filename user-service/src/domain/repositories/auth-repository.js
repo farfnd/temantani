@@ -1,9 +1,8 @@
 const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
-const models = require("../models/index.js");
+const { User, Role, UserRoles } = require("../models/index.js");
 const UserRegistered = require("../events/user-registered.js");
 
 module.exports = (eventPublisher) => {
-    const { User, Role, UserRoles } = models;
     const repository = {
         register: async (body) => {
             const { roles, ...userBody } = body; // Extract roles from request body
@@ -33,14 +32,13 @@ module.exports = (eventPublisher) => {
             let user;
             try {
                 user = await User.findByPk(createdUser.id, { include: 'roles' }); // Get user with roles
-                console.log(user);
             } catch (error) {
                 throw error;
             }
 
             // Raise the UserRegistered domain event
-            // const userRegisteredEvent = new UserRegistered(user);
-            // eventPublisher.publish(userRegisteredEvent);
+            const userRegisteredEvent = new UserRegistered(user);
+            eventPublisher.publish(userRegisteredEvent);
         },
         login: async (email, password) => {
             try {

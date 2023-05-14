@@ -4,13 +4,21 @@ module.exports = class EventPublisher {
     }
 
     async publish(event) {
+        console.log('Publishing event to Kafka');
         const message = {
             topic: 'user-topic',
-            messages: [
-                { value: JSON.stringify(event) },
-            ],
+            messages: [JSON.stringify(event)],
         };
 
-        await this.kafkaProducer.send(message);
+        try {
+            this.kafkaProducer.send([message], (err, data) => {
+                if (err) {
+                    throw err;
+                }
+                console.log('Message sent successfully:', data);
+            });
+        } catch (error) {
+            throw error;
+        }
     }
 };

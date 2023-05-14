@@ -1,18 +1,21 @@
 const express = require("express");
 const { json } = require("express");
 const app = express();
-const port = process.env.PORT || 4000;
 const cors = require("cors");
 const routes = require("./interfaces/routes/index.js");
 const EventPublisher = require("./infrastructure/event-publisher.js");
 const kafka = require("kafka-node");
 
-const client = new kafka.KafkaClient({ kafkaHost: process.env.KAFKA_BOOTSTRAP_SERVERS });
+require('dotenv').config();
+const port = process.env.PORT || 4000;
+const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
+
+const client = new kafka.KafkaClient({ kafkaHost: kafkaBootstrapServer });
 const producer = new kafka.Producer(client);
 
-// producer.on("ready", () => {
-//     console.log("Kafka producer is ready");
-// });
+producer.on("ready", () => {
+    console.log("Kafka producer is ready");
+});
 
 const eventPublisher = new EventPublisher(producer);
 
