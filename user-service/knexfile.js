@@ -1,10 +1,35 @@
 // Update with your config settings.
-const development = {
-  client: 'sqlite3',
+const local = {
+  client: 'postgresql',
   connection: {
-    filename: './dev.sqlite3'
+    host: 'localhost', 
+    database: 'user_service',
+    user: 'postgres',
+    password: 'farhan'
   },
-  useNullAsDefault: true,
+  pool: {
+    min: 2,
+    max: 10
+  },
+  migrations: {
+    tableName: 'knex_migrations'
+  },
+};
+const development = {
+  client: 'postgresql',
+  connection: {
+    host: 'postgres_tt', 
+    database: 'user_service',
+    user: 'postgres',
+    password: 'postgres'
+  },
+  pool: {
+    min: 2,
+    max: 10
+  },
+  migrations: {
+    tableName: 'knex_migrations'
+  },
 };
 const staging = {
   client: 'postgresql',
@@ -37,4 +62,4 @@ const production = {
   }
 };
 
-export default { development, staging, production };
+export default { local, development, staging, production };

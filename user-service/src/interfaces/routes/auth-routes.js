@@ -2,13 +2,13 @@ import { express, controllers, repositories, useCases } from './abstracts/common
 
 const router = express.Router();
 
-const authRepo = repositories.authRepository()
-const authUseCase = useCases.authUseCases(authRepo)
-const authController = controllers.authController(authUseCase)
+export default (app, eventPublisher) => {
+    const authRepo = repositories.authRepository(eventPublisher)
+    const authUseCase = useCases.authUseCases(authRepo)
+    const authController = controllers.authController(authUseCase)
+    
+    router.post("/register", authController.register);
+    router.post("/login", authController.login);
 
-router.post("/register", authController.register);
-router.post("/login", authController.login);
-
-export default (app) => {
     app.use('/', router);
 };

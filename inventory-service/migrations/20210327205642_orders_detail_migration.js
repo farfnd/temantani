@@ -1,5 +1,4 @@
-
-exports.up = function(knex) {
+export function up(knex) {
     return knex.schema.createTable("order_details", function(table){
         table.increments('id');
         table.integer('order_id').notNullable();
@@ -7,8 +6,8 @@ exports.up = function(knex) {
         table.integer('cart_id').notNullable();
         table.foreign('cart_id').references('carts.id')
     })
-};
+}
   
-exports.down = function(knex) {
+export function down(knex) {
   return knex.schema.dropTable("order_details")
-};
+}

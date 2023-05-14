@@ -1,5 +1,4 @@
-
-exports.up = function(knex) {
+export function up(knex) {
     return knex.schema
         .createTable('products', function (table) {
             table.increments('id');
@@ -8,9 +7,9 @@ exports.up = function(knex) {
             table.string('image', 255).notNullable();
             table.decimal('price').notNullable();
         })
-};
+}
 
-exports.down = function(knex) {
+export function down(knex) {
     return knex.schema
         .dropTable("products")
-};
+}

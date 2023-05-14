@@ -7,11 +7,8 @@ export default () => {
         getAllUsers: () => {
             return User.findAll().select(selectProps);
         },
-        getUserById: async (id) => {
-            const user = await User.find({ id }).select(selectProps).first();
-            const roles = await User.getUserRoles(id);
-            user.roles = roles.map(role => role.name);
-            return user;
+        getUserById: (id) => {
+            return User.getWithUserRoles(id);
         },
         createUser: (body) => {
             return User.create(body);

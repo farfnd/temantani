@@ -1,5 +1,4 @@
-
-exports.up = function(knex) {
+export function up(knex) {
     return knex.schema
         .createTable('users', function (table) {
             table.increments('id');
@@ -8,9 +7,9 @@ exports.up = function(knex) {
             table.string('password', 255).notNullable();
             table.string('phone', 17).notNullable();
         })
-};
+}
 
-exports.down = function(knex) {
+export function down(knex) {
     return knex.schema
         .dropTable("users")
-};
+}

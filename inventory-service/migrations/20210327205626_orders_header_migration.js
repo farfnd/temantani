@@ -1,5 +1,4 @@
-
-exports.up = function(knex) {
+export function up(knex) {
     return knex.schema.createTable("orders", function(table){
         table.increments('id');
         table.integer('total').notNullable();
@@ -10,8 +9,8 @@ exports.up = function(knex) {
         table.integer('coupon_id').nullable();
         table.foreign('coupon_id').references('coupons.id')
     })
-};
+}
   
-exports.down = function(knex) {
+export function down(knex) {
   return knex.schema.dropTable("orders")
-};
+}

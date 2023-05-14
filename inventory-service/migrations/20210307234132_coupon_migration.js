@@ -1,5 +1,4 @@
-
-exports.up = function(knex) {
+export function up(knex) {
   return knex.schema.createTable("coupons", function(table){
       table.increments('id');
       table.string("code", 100).unique().notNullable();
@@ -7,8 +6,8 @@ exports.up = function(knex) {
       table.integer('percentage');
       table.integer('fixedDiscount');
   })
-};
+}
 
-exports.down = function(knex) {
+export function down(knex) {
   return knex.schema.dropTable("coupons")
-};
+}

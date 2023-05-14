@@ -13,4 +13,11 @@ User.getUserRoles = async (userId) => {
     return roles;
 };
 
+User.getWithUserRoles = async (userId) => {
+    const user = await User.find({ id: userId }).first();
+    const roles = await User.getUserRoles(userId);
+    user.roles = roles.map(role => role.name);
+    return user;
+};
+
 export default User;
