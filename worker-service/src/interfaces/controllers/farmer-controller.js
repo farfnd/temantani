@@ -24,7 +24,7 @@ module.exports = (usecase) => {
 
         getCurrentFarmer: async (req, res) => {
             try {
-                const data = await usecase.getFarmerById(req.farmer.id);
+                const data = await usecase.getFarmerById(req.user.id);
                 res.send(data);
             } catch (error) {
                 res.statusCode = 500;
