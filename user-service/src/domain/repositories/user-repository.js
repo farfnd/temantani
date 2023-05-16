@@ -5,14 +5,18 @@ module.exports = () => {
     const repository = {
         getAllUsers: () => {
             return User.findAll({
-                attributes: selectProps,
+                attributes: { exclude: ['password'] }
             });
         },
-        getUserById: (id) => {
-            return User.findOne({
-                where: { id },
-                include: [{ model: UserRoles }],
+        getUserById: async (id) => {
+            const user = await User.findByPk(id, {
+                include: 'roles',
+                attributes: { exclude: ['password'] },
             });
+            if (!user) {
+                throw new Error(`User with id ${id} not found`);
+            }
+            return user;
         },
         createUser: (body) => {
             return User.create(body);

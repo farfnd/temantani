@@ -4,14 +4,14 @@ const app = express();
 const cors = require("cors");
 const routes = require("./interfaces/routes/index.js");
 const EventPublisher = require("./infrastructure/event-publisher.js");
-const KafkaService = require("./infrastructure/services/kafka-service.js");
+const KafkaProducer = require("./infrastructure/services/kafka-producer.js");
 
 require('dotenv').config();
 const port = process.env.PORT || 4000;
 const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
 
-const kafkaService = new KafkaService(kafkaBootstrapServer);
-const eventPublisher = new EventPublisher(kafkaService);
+const kafkaProducer = new KafkaProducer(kafkaBootstrapServer);
+const eventPublisher = new EventPublisher(kafkaProducer);
 
 app.use(cors());
 app.use(json());

@@ -1,9 +1,12 @@
 class UserRegistered {
     constructor(user) {
-        this.userId = user.id;
+        this.id = user.id;
         this.name = user.name;
         this.email = user.email;
-        this.roles = user.roles;
+        this.phone = user.phone;
+        this.createdAt = user.createdAt;
+        this.updatedAt = user.updatedAt;
+        this.roles = user.roles.map(role => role.name);
     }
 }
 

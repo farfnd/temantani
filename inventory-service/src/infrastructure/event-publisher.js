@@ -1,23 +1,14 @@
 class EventPublisher {
     constructor(kafkaService) {
         this.kafkaService = kafkaService;
-        this.topicMapping = {
-            UserRegistered: 'user-topic',
-            // other domain events and their corresponding topics
-        };
     }
 
     async publish(event) {
         console.log("Publishing event to Kafka");
         const message = JSON.stringify(event);
+        const topic = "user-topic";
 
         try {
-            const topic = this.topicMapping[event.constructor.name];
-            console.log("Topic:", topic);
-            if (!topic) {
-                throw new Error(`No topic mapping found for event: ${event.constructor.name}`);
-            }
-
             this.kafkaService.publishMessage(topic, message);
             console.log("Event published successfully");
         } catch (error) {
