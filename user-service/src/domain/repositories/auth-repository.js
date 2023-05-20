@@ -1,5 +1,5 @@
 const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
-const { User, Role, UserRoles } = require("../models/index.js");
+const { User, Role, UserRole } = require("../models/index.js");
 const UserRegistered = require("../events/user-registered.js");
 
 module.exports = (eventPublisher) => {
@@ -25,8 +25,13 @@ module.exports = (eventPublisher) => {
                         }
                     })
                 );
-
-                await UserRoles.bulkCreate(userRoles.filter(Boolean));
+                
+                console.log(userRoles)
+                try {
+                    await UserRole.bulkCreate(userRoles);
+                } catch (error) {
+                    console.log(error)
+                }
             }
 
             let user;
