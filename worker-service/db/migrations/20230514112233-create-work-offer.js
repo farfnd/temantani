@@ -2,37 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Farmers', {
+    await queryInterface.createTable('WorkOffers', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
       },
-      name: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING,
+      projectId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true,
+        references: {
+          model: 'Projects',
+          key: 'id'
+        }
       },
-      phone: {
-        type: Sequelize.STRING,
+      farmerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Farmers',
+          key: 'id'
+        }
       },
-      profilePictureUrl: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      status: {
+        type: Sequelize.ENUM('pending', 'accepted', 'rejected'),
+        allowNull: false,
+        defaultValue: 'pending'
       },
-      bank: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccountNumber: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccountName: {
+      workContractUrl: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -46,9 +44,15 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
+    }, {
+      uniqueKeys: {
+          actions_unique: {
+              fields: ['projectId', 'farmerId']
+          }
+      }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Farmers');
+    await queryInterface.dropTable('WorkOffers');
   }
 };

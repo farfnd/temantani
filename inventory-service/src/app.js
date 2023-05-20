@@ -1,36 +1,31 @@
 const express = require('express');
-const { json } = require("express");
-const kafka = require('kafka-node');
+const { json } = require('express');
 const app = express();
-const cors = require("cors");
-const routes = require("./interfaces/routes/index.js");
+const cors = require('cors');
+const kafka = require('kafka-node');
+const routes = require('./interfaces/routes');
+const KafkaProducer = require('./infrastructure/services/kafka-producer');
+const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
 
 require('dotenv').config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
-const kafkaTopic = process.env.KAFKA_TOPIC;
 
-const client = new kafka.KafkaClient({ kafkaHost: kafkaBootstrapServer });
-const consumer = new kafka.Consumer(client, [{ topic: kafkaTopic }], { autoCommit: false });
-
-consumer.on("ready", () => {
-    console.log("Kafka consumer is ready");
-});
-consumer.on('message', async (message) => {
-    console.log('Received message:', message);
-});
-consumer.on('error', (err) => {
-    console.log(err);
-});
+const kafkaProducer = new KafkaProducer(kafkaBootstrapServer);
+const kafkaConsumer = new KafkaConsumer(kafkaBootstrapServer);
 
 app.use(cors());
 app.use(json());
-app.get("/", (req, res) => {
-    res.send("Welcome to Inventory Service");
+app.get('/', (req, res) => {
+    res.send('Welcome to Inventory Service');
 });
 
-routes(app);
+routes(app, kafkaProducer);
+
+kafkaConsumer.start();
 
 app.listen(port, () => {
-    console.log(`Inventory service listening at http://localhost:${port}`)
-})
+    console.log(`Server running at http://localhost:${port}`);
+});
+
+module.exports = app;

@@ -3,10 +3,9 @@ class EventPublisher {
         this.kafkaService = kafkaService;
     }
 
-    async publish(event) {
+    async publish(event, topic) {
         console.log("Publishing event to Kafka");
         const message = JSON.stringify(event);
-        const topic = "user-topic";
 
         try {
             this.kafkaService.publishMessage(topic, message);

@@ -1,30 +1,48 @@
 'use strict';
-const { hashPassword } = require('../../src/utils/password');
+const { hashPassword } = require('../../src/utils.js');
+const { v4 } = require('uuid');
+const AdminRole = require('../../src/domain/enums/AdminRole');
+const UserRole = require('../../src/domain/enums/UserRole');
+const { Role } = require('../../src/domain/models/index.js');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
     const users = [
       {
-        name: 'Admin',
-        email: 'admin@admin.com',
+        name: 'SuperAdmin',
+        email: 'SuperAdmin@admin.com',
         password: hashPassword('password'),
         phone: '1234567890',
-        roles: ['admin.farmer', 'admin.store']
+        roles: [AdminRole.SUPER]
+      },
+      {
+        name: 'Admin_Buyer',
+        email: 'Admin_Buyer@admin.com',
+        password: hashPassword('password'),
+        phone: '1234567890',
+        roles: [AdminRole.BUYER]
+      },
+      {
+        name: 'Admin_Worker',
+        email: 'Admin_Worker@admin.com',
+        password: hashPassword('password'),
+        phone: '1234567890',
+        roles: [AdminRole.WORKER]
       },
       {
         name: 'Budi',
         email: 'budi@test.com',
         password: hashPassword('password'),
         phone: '081234567890',
-        roles: ['farmer']
+        roles: [UserRole.WORKER]
       },
       {
         name: 'Candra',
         email: 'candra@test.com',
         password: hashPassword('password'),
         phone: '081234567890',
-        roles: ['customer']
+        roles: [UserRole.BUYER]
       }
     ];
     

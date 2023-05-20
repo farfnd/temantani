@@ -2,37 +2,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Farmers', {
+    await queryInterface.createTable('Projects', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
       },
-      name: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING,
+      landId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true,
+        references: {
+          model: 'Lands',
+          key: 'id'
+        }
       },
-      phone: {
-        type: Sequelize.STRING,
+      status: {
+        type: Sequelize.ENUM('fundraising', 'hiring', 'ongoing', 'finished', 'canceled'),
+        allowNull: false,
+        defaultValue: 'fundraising'
       },
-      profilePictureUrl: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      workerNeeds: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
       },
-      bank: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccountNumber: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccountName: {
+      description: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -49,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Farmers');
+    await queryInterface.dropTable('Projects');
   }
 };

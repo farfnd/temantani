@@ -1,4 +1,5 @@
 const { hashPassword } = require('../../utils.js');
+const { validateFarmer } = require('../../application/validators/farmer-validator');
 
 module.exports = (usecase) => {
     const controller = {
