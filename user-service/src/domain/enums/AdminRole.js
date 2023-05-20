@@ -1,23 +1,10 @@
-class AdminRole {
-    static get SUPER() {
-        return 'ADMIN_SUPER';
-    }
 
-    static get LANDOWNER() {
-        return 'ADMIN_LANDOWNER';
-    }
-
-    static get PROJECT() {
-        return 'ADMIN_PROJECT';
-    }
-
-    static get WORKER() {
-        return 'ADMIN_WORKER';
-    }
-
-    static get BUYER() {
-        return 'ADMIN_BUYER';
-    }
-}
+const AdminRole = {
+    SUPER: 'ADMIN_SUPER',
+    LANDOWNER: 'ADMIN_LANDOWNER',
+    PROJECT: 'ADMIN_PROJECT',
+    WORKER: 'ADMIN_WORKER',
+    BUYER: 'ADMIN_BUYER',
+};
 
 module.exports = AdminRole;

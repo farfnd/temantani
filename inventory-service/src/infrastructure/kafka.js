@@ -23,7 +23,7 @@ class Kafka {
 
     createConsumer(topics) {
         console.log('Creating Kafka consumer');
-        const consumer = new kafka.Consumer(this.client, topics, { autoCommit: false });
+        const consumer = new kafka.Consumer(this.client, topics);
         consumer.on('ready', () => {
             console.log('Kafka consumer is ready');
         });

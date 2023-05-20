@@ -1,19 +1,8 @@
-class UserRole {
-    static get LANDOWNER() {
-        return 'LANDOWNER';
-    }
-
-    static get PROJECT() {
-        return 'INVESTOR';
-    }
-
-    static get WORKER() {
-        return 'WORKER';
-    }
-
-    static get BUYER() {
-        return 'BUYER';
-    }
-}
+const UserRole = {
+    LANDOWNER: 'LANDOWNER',
+    INVESTOR: 'INVESTOR',
+    WORKER: 'WORKER',
+    BUYER: 'BUYER',
+};
 
 module.exports = UserRole;

@@ -1,4 +1,5 @@
 const { toLower } = require("lodash");
+const AdminRole = require("../../domain/enums/InventoryAdminRole");
 
 module.exports = (repository) => {
     const useCases = {
@@ -20,15 +21,14 @@ module.exports = (repository) => {
         createAdminFromMessage: async (message) => {
             try {
                 const newUser = JSON.parse(message.value.toString());
-                console.log("masuk")
-                const adminRoles = ['admin_store', 'admin_super'];
-                const hasAdminRole = newUser.roles.some(role => adminRoles.includes(toLower(role)));
+                const adminRoles = Object.values(AdminRole);
+                
+                const hasAdminRole = newUser.roles.some(role => adminRoles.includes(role));
                 if (!hasAdminRole) {
-                    console.log('User does not have the store admin role');
+                    console.log('User does not have a valid admin role');
                     return;
                 }
                 delete newUser.roles;
-                console.log("masuk2")
                 return repository.createAdmin(newUser);
             } catch (error) {
                 console.error('Error creating admin from message:', error);
