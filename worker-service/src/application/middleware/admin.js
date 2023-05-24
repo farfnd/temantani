@@ -1,3 +1,4 @@
+const { toLower } = require("lodash");
 const { verifyJwt } = require("../../utils.js");
 
 module.exports = function (req, res, next) {
@@ -7,7 +8,8 @@ module.exports = function (req, res, next) {
         req.user = decoded;
 
         // Check if the user has an admin role
-        const isAdmin = decoded.roles.some(role => role.startsWith('admin'));
+        console.log(decoded);
+        const isAdmin = decoded.roles.some(role => toLower(role).startsWith('admin'));
 
         if (isAdmin) {
             // User is an admin
