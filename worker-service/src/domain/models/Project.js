@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const ProjectStatus = require('../enums/ProjectStatus');
+
 module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
     /**
@@ -23,9 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     status: {
-      type: DataTypes.ENUM('fundraising', 'hiring', 'ongoing', 'finished', 'canceled'),
+      type: DataTypes.ENUM(Object.values(ProjectStatus)),
       allowNull: false,
-      defaultValue: 'fundraising'
+      defaultValue: ProjectStatus.FUNDRAISING
     },
     workerNeeds: {
       type: DataTypes.INTEGER,

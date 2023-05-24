@@ -1,5 +1,7 @@
 'use strict';
+const AcceptableStatus = require('../../src/domain/enums/AcceptableStatus');
 /** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('WorkOffers', {
@@ -35,7 +37,7 @@ module.exports = {
         allowNull: true,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'accepted', 'rejected'),
+        type: Sequelize.ENUM(Object.values(AcceptableStatus)),
         allowNull: false,
         defaultValue: 'pending'
       },

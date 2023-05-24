@@ -20,6 +20,7 @@ module.exports = {
       },
       phoneNumber: {
         type: Sequelize.STRING,
+        allowNull: true,
       },
       profilePictureUrl: {
         type: Sequelize.STRING,

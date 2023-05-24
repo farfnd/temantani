@@ -1,5 +1,7 @@
 'use strict';
+const ProjectStatus = require('../../src/domain/enums/ProjectStatus');
 /** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Projects', {
@@ -19,9 +21,9 @@ module.exports = {
         }
       },
       status: {
-        type: Sequelize.ENUM('fundraising', 'hiring', 'ongoing', 'finished', 'canceled'),
+        type: Sequelize.ENUM(Object.values(ProjectStatus)),
         allowNull: false,
-        defaultValue: 'fundraising'
+        defaultValue: ProjectStatus.FUNDRAISING
       },
       workerNeeds: {
         type: Sequelize.INTEGER,

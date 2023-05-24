@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const AcceptableStatus = require('../enums/AcceptableStatus');
+
 module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
     /**
@@ -33,10 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
     },
     status: {
-      type: DataTypes.ENUM('pending', 'accepted', 'rejected'),
+      type: DataTypes.ENUM(Object.values(AcceptableStatus)),
       allowNull: false,
-      defaultValue: 'pending',
-      validate: { notNull: true, notEmpty: true, isIn: [['pending', 'accepted', 'rejected']] }
+      defaultValue: AcceptableStatus.PENDING,
+      validate: { notNull: true, notEmpty: true, isIn: [Object.values(AcceptableStatus)] }
     },
     workContractUrl: {
       type: DataTypes.STRING,
