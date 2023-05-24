@@ -1,21 +1,12 @@
-module.exports = (repository) => {
-    const useCases = {
-        getAllAdmins: () => {
-            return repository.getAllAdmins()
-        },
-        getAdminById: (id) => {
-            return repository.getAdminById(id)
-        },
-        createAdmin: (body) => {
-            return repository.createAdmin(body)
-        },
-        updateAdmin: (id, body) => {
-            return repository.updateAdmin(id, body)
-        },
-        deleteAdmin: (id) => {
-            return repository.deleteAdmin(id)
-        },
-    };
+const AbstractUseCase = require('./abstracts/base-use-cases');
 
-    return useCases;
+class AdminUseCase extends AbstractUseCase {
+    constructor(repository) {
+        super(repository);
+    }
 }
+
+module.exports = (repository) => {
+    const useCases = new AdminUseCase(repository);
+    return useCases;
+};

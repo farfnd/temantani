@@ -19,9 +19,9 @@ async function handle(message) {
 async function handleNewUser(message) {
     try {
         message = validateMessage(message);
-        const adminRepo = repositories.adminRepository();
+        const adminRepo = repositories.adminRepository;
         const adminUseCase = useCases.adminUseCases(adminRepo);
-        const admin = await adminUseCase.createAdmin(message);
+        const admin = await adminUseCase.create(message);
         if (!admin) {
             return;
         }

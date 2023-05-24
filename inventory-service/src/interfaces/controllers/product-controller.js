@@ -1,8 +1,8 @@
 module.exports = (usecase) => {
     const controller = {
-        getAllProducts: async (_, res) => {
+        index: async (_, res) => {
             try {
-                const data = await usecase.getAllProducts()
+                const data = await usecase.getAlls()
                 res.send(data)
             } catch (error) {
                 res.statusCode = 500
@@ -10,9 +10,9 @@ module.exports = (usecase) => {
             }
         },
 
-        getProductById: async (req, res) => {
+        show: async (req, res) => {
             try {
-                const data = await usecase.getProductById(req.params.id)
+                const data = await usecase.getById(req.params.id)
                 res.send(data)
             } catch (error) {
                 res.statusCode = 500
@@ -20,9 +20,9 @@ module.exports = (usecase) => {
             }
         },
 
-        createProduct: async (req, res) => {
+        store: async (req, res) => {
             try {
-                await usecase.createProduct(req.body)
+                await usecase.create(req.body)
                 res.status(200).json({
                     message: "success"
                 })
@@ -31,9 +31,9 @@ module.exports = (usecase) => {
             }
         },
 
-        updateProductById: async (req, res) => {
+        update: async (req, res) => {
             try {
-                await usecase.updateProduct(req.params.id, req.body)
+                await usecase.update(req.params.id, req.body)
                 res.status(200).json({
                     message: "success"
                 })
@@ -42,9 +42,9 @@ module.exports = (usecase) => {
             }
         },
 
-        deleteProductById: async (req, res) => {
+        destroy: async (req, res) => {
             try {
-                await usecase.deleteProduct(req.params.id)
+                await usecase.delete(req.params.id)
                 res.status(200).json({
                     message: "success"
                 })
