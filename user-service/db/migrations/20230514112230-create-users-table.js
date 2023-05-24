@@ -18,7 +18,7 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      phone: {
+      phoneNumber: {
         type: Sequelize.STRING,
       },
       createdAt: {

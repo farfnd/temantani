@@ -27,7 +27,7 @@ module.exports = (usecase) => {
                 const body = {
                     name: req.body.name,
                     email: req.body.email,
-                    phone: req.body.phone,
+                    phoneNumber: req.body.phoneNumber,
                 };
                 await usecase.create(body);
                 res.status(200).json({

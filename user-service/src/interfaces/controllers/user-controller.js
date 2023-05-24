@@ -36,7 +36,7 @@ module.exports = (usecase) => {
                     name: req.body.name,
                     email: req.body.email,
                     password: hashPassword(req.body.password),
-                    phone: req.body.phone,
+                    phoneNumber: req.body.phoneNumber,
                 };
                 await usecase.createUser(body);
                 res.status(200).json({

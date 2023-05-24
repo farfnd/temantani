@@ -13,35 +13,35 @@ module.exports = {
         name: 'SuperAdmin',
         email: 'SuperAdmin@admin.com',
         password: hashPassword('password'),
-        phone: '1234567890',
+        phoneNumber: '1234567890',
         roles: [AdminRole.SUPER]
       },
       {
         name: 'Admin_Buyer',
         email: 'Admin_Buyer@admin.com',
         password: hashPassword('password'),
-        phone: '1234567890',
+        phoneNumber: '1234567890',
         roles: [AdminRole.BUYER]
       },
       {
         name: 'Admin_Worker',
         email: 'Admin_Worker@admin.com',
         password: hashPassword('password'),
-        phone: '1234567890',
+        phoneNumber: '1234567890',
         roles: [AdminRole.WORKER]
       },
       {
         name: 'Budi',
         email: 'budi@test.com',
         password: hashPassword('password'),
-        phone: '081234567890',
+        phoneNumber: '081234567890',
         roles: [UserRole.WORKER]
       },
       {
         name: 'Candra',
         email: 'candra@test.com',
         password: hashPassword('password'),
-        phone: '081234567890',
+        phoneNumber: '081234567890',
         roles: [UserRole.BUYER]
       }
     ];

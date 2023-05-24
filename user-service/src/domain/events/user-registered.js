@@ -4,7 +4,7 @@ class UserRegistered {
         this.userId = user.id;
         this.name = user.name;
         this.email = user.email;
-        this.phone = user.phone;
+        this.phoneNumber = user.phoneNumber;
         this.createdAt = user.createdAt;
         this.updatedAt = user.updatedAt;
         this.roles = (user.roles.map(role => role.name)).join();
