@@ -1,6 +1,6 @@
 // KafkaConsumer.js
 const Kafka = require('../kafka');
-const handlers = require('../../interfaces/handlers');
+const handlers = require('../../interfaces/event-handlers');
 
 class KafkaConsumer {
     constructor(bootstrapServer) {
