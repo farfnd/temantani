@@ -1,4 +1,5 @@
 'use strict';
+const ProductStatus = require('../../src/domain/enums/ProductStatus');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -22,7 +23,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       status: {
-        type: Sequelize.ENUM('pre_order', 'available', 'not_available'),
+        type: Sequelize.ENUM(Object.values(ProductStatus)),
+        allowNull: false,
+        defaultValue: ProductStatus.AVAILABLE
       },
       preOrderEstimatedStock: {
         type: Sequelize.INTEGER,
