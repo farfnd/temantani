@@ -1,4 +1,4 @@
-const { User, Role, UserRoles } = require('../models/index.js');
+const { User, Role, UserRoles } = require('../models');
 
 module.exports = () => {
     const selectProps = ['id', 'email', 'name', 'phone'];

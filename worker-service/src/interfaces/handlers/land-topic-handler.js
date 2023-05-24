@@ -1,12 +1,16 @@
-const useCases = require("../../application/use-cases/index.js");
-const repositories = require("../../domain/repositories/index.js");
+const useCases = require("../../application/use-cases");
+const repositories = require("../../domain/repositories");
+
+async function handle(message) {
+    await handleNewLand(message)
+}
 
 async function handleNewLand(message) {
     try {
         console.log('Received message:', message);
         const landRepo = repositories.landRepository();
         const landUseCase = useCases.landUseCases(landRepo);
-        const land = await landUseCase.createLandFromMessage(message);
+        const land = await landUseCase.create(message);
 
         console.log('New land created');
     } catch (error) {
@@ -14,4 +18,4 @@ async function handleNewLand(message) {
     }
 }
 
-module.exports = { handleNewLand };
+module.exports = { handle };

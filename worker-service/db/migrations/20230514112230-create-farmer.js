@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      phone: {
+      phoneNumber: {
         type: Sequelize.STRING,
       },
       profilePictureUrl: {
@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      bankAccountName: {
+      bankAccountHolderName: {
         type: Sequelize.STRING,
         allowNull: true,
       },

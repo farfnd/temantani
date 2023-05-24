@@ -2,7 +2,7 @@ const { express, controllers, repositories, useCases, middlewares } = require('.
 
 const router = express.Router();
 
-const farmerRepo = repositories.farmerRepository();
+const farmerRepo = repositories.farmerRepository;
 const farmerUseCase = useCases.farmerUseCases(farmerRepo);
 const farmerController = controllers.farmerController(farmerUseCase);
 

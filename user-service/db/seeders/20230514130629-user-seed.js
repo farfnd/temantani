@@ -3,7 +3,7 @@ const { hashPassword } = require('../../src/utils.js');
 const { v4 } = require('uuid');
 const AdminRole = require('../../src/domain/enums/AdminRole');
 const UserRole = require('../../src/domain/enums/UserRole');
-const { Role } = require('../../src/domain/models/index.js');
+const { Role } = require('../../src/domain/models');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

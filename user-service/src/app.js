@@ -2,7 +2,7 @@ const express = require("express");
 const { json } = require("express");
 const app = express();
 const cors = require("cors");
-const routes = require("./interfaces/routes/index.js");
+const routes = require("./interfaces/routes");
 const EventPublisher = require("./infrastructure/event-publisher.js");
 const KafkaProducer = require("./infrastructure/services/kafka-producer.js");
 

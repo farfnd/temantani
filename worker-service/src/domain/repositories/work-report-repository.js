@@ -1,23 +1,10 @@
-const { WorkReport } = require('../models/index.js');
+const { WorkReport } = require('../models');
+const BaseRepository = require('./abstracts/base-repository');
 
-module.exports = () => {
-    const repository = {
-        getAllWorkReports: () => {
-            return WorkReport.findAll();
-        },
-        getWorkReportById: (id) => {
-            return WorkReport.findOne({ where: { id } });
-        },
-        createWorkReport: (body) => {
-            return WorkReport.create(body);
-        },
-        updateWorkReport: (id, body) => {
-            return WorkReport.update(body, { where: { id } });
-        },
-        deleteWorkReport: async (id) => {
-            return WorkReport.destroy({ where: { id } });
-        },
-    };
+class WorkReportRepository extends BaseRepository {
+    constructor() {
+        super(WorkReport);
+    }
+}
 
-    return repository;
-};
+module.exports = new WorkReportRepository();

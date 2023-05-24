@@ -1,23 +1,10 @@
-const { Project } = require('../models/index.js');
+const { Project } = require('../models');
+const BaseRepository = require('./abstracts/base-repository');
 
-module.exports = () => {
-    const repository = {
-        getAllProjects: () => {
-            return Project.findAll();
-        },
-        getProjectById: (id) => {
-            return Project.findOne({ where: { id } });
-        },
-        createProject: (body) => {
-            return Project.create(body);
-        },
-        updateProject: (id, body) => {
-            return Project.update(body, { where: { id } });
-        },
-        deleteProject: async (id) => {
-            return Project.destroy({ where: { id } });
-        },
-    };
+class ProjectRepository extends BaseRepository {
+    constructor() {
+        super(Project);
+    }
+}
 
-    return repository;
-};
+module.exports = new ProjectRepository();

@@ -1,5 +1,5 @@
 const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
-const { User, Role, UserRole } = require("../models/index.js");
+const { User, Role, UserRole } = require("../models");
 const UserRegistered = require("../events/user-registered.js");
 const UserEventType = require("../enums/UserEventType.js");
 

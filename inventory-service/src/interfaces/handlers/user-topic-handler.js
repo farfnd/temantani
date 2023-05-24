@@ -1,5 +1,5 @@
-const useCases = require("../../application/use-cases/index.js");
-const repositories = require("../../domain/repositories/index.js");
+const useCases = require("../../application/use-cases");
+const repositories = require("../../domain/repositories");
 const UserEventType = require('../../domain/enums/UserEventType');
 const AdminRole = require("../../domain/enums/InventoryAdminRole");
 

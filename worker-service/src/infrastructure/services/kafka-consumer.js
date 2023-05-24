@@ -1,40 +1,40 @@
 // KafkaConsumer.js
 const Kafka = require('../kafka');
-const handlers = require('../handlers/index');
+const handlers = require('../../interfaces/handlers');
 
 class KafkaConsumer {
     constructor(bootstrapServer) {
         this.kafka = new Kafka(bootstrapServer);
-        // Define your consumer topics
-        this.userConsumerTopic = 'user-topic';
-        this.landConsumerTopic = 'land-topic';
-        this.projectConsumerTopic = 'project-topic';
+        // Define your consumer topics and their corresponding handlers
+        this.topicToHandlerMap = {
+            'user-topic': handlers.userTopicHandler,
+            // 'land-registered-topic': handlers.landTopicHandler,
+            'project-topic': handlers.projectTopicHandler,
+        };
     }
 
     async start() {
         try {
-            const consumer = await this.kafka.createConsumer([
-                { topic: this.userConsumerTopic },
-                { topic: this.landConsumerTopic },
-                { topic: this.projectConsumerTopic }
-            ]);
+            const consumer = await this.kafka.createConsumer(
+                Object.keys(this.topicToHandlerMap).map(topic => ({ topic }))
+            );
 
             console.log('Kafka consumer created');
 
             consumer.on('message', (message) => {
-                // Call the appropriate topic handler based on the received message's topic
-                switch (message.topic) {
-                    case this.userConsumerTopic:
-                        handlers.userTopicHandler.handleNewUser(message);
-                        break;
-                    case this.landConsumerTopic:
-                        handlers.landTopicHandler.handleLand(message);
-                        break;
-                    case this.projectConsumerTopic:
-                        handlers.projectTopicHandler.handleProject(message);
-                        break;
-                    default:
-                        console.log(`No handler found for topic: ${message.topic}`);
+                let value;
+                try {
+                    value = JSON.parse(message.value);
+                } catch (error) {
+                    console.error('Error parsing message:', error.message);
+                    return;
+                }
+                
+                const handler = this.topicToHandlerMap[message.topic];
+                if (handler) {
+                    handler.handle(value);
+                } else {
+                    console.log(`No handler found for topic: ${message.topic}`);
                 }
             });
         } catch (error) {

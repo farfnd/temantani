@@ -2,17 +2,17 @@ const { express, controllers, repositories, useCases, middlewares } = require('.
 
 const router = express.Router();
 
-const farmerRepo = repositories.farmerRepository();
+const farmerRepo = repositories.farmerRepository;
 const farmerUseCase = useCases.farmerUseCases(farmerRepo);
 const farmerController = controllers.farmerController(farmerUseCase);
 
 router.use(middlewares.admin);
 
-router.get("/", farmerController.getAllFarmers);
-router.get("/:id", farmerController.getFarmerById);
-router.post("/", farmerController.createFarmer);
-router.put("/:id", farmerController.updateFarmerById);
-router.delete("/:id", farmerController.deleteFarmerById);
+router.get("/", farmerController.index);
+router.get("/:id", farmerController.show);
+router.post("/", farmerController.store);
+router.put("/:id", farmerController.update);
+router.delete("/:id", farmerController.destroy);
 
 module.exports = (app) => {
     app.use('/farmers', router);

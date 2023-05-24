@@ -22,16 +22,6 @@ module.exports = (usecase) => {
             }
         },
 
-        getCurrentFarmer: async (req, res) => {
-            try {
-                const data = await usecase.getById(req.user.id);
-                res.send(data);
-            } catch (error) {
-                res.statusCode = 500;
-                res.send(error);
-            }
-        },
-
         store: async (req, res) => {
             try {
                 const body = {

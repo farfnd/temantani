@@ -2,7 +2,7 @@ import express, { json } from "express";
 const app = express()
 const port = process.env.PORT || 4001;
 import cors from 'cors';
-import routes from './interfaces/routes/index.js';
+import routes from './interfaces/routes';
 import kafka from 'kafka-node';
 import User from './domain/models/User.js';
 

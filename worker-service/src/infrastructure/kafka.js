@@ -26,11 +26,9 @@ class Kafka {
         const consumer = new kafka.Consumer(this.client, topics);
         consumer.on('ready', () => {
             console.log('Kafka consumer is ready');
-            resolve(consumer);
         });
         consumer.on('error', (error) => {
             console.error('Error connecting to Kafka consumer:', error);
-            reject(error);
         });
         return consumer;
     }

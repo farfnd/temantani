@@ -1,23 +1,10 @@
-const { WorkOffer } = require('../models/index.js');
+const { WorkOffer } = require('../models');
+const BaseRepository = require('./abstracts/base-repository');
 
-module.exports = () => {
-    const repository = {
-        getAllWorkOffers: () => {
-            return WorkOffer.findAll();
-        },
-        getWorkOfferById: (id) => {
-            return WorkOffer.findOne({ where: { id } });
-        },
-        createWorkOffer: (body) => {
-            return WorkOffer.create(body);
-        },
-        updateWorkOffer: (id, body) => {
-            return WorkOffer.update(body, { where: { id } });
-        },
-        deleteWorkOffer: async (id) => {
-            return WorkOffer.destroy({ where: { id } });
-        },
-    };
+class WorkOfferRepository extends BaseRepository {
+    constructor() {
+        super(WorkOffer);
+    }
+}
 
-    return repository;
-};
+module.exports = new WorkOfferRepository();

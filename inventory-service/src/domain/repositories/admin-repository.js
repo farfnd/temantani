@@ -1,4 +1,4 @@
-const { Admin } = require('../models/index.js');
+const { Admin } = require('../models');
 
 module.exports = () => {
     const repository = {

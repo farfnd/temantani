@@ -1,4 +1,4 @@
-const { Product } = require('../models/index.js');
+const { Product } = require('../models');
 
 module.exports = () => {
     const repository = {

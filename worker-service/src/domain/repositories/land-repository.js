@@ -1,23 +1,10 @@
-const { Land } = require('../models/index.js');
+const { Land } = require('../models');
+const BaseRepository = require('./abstracts/base-repository');
 
-module.exports = () => {
-    const repository = {
-        getAllLands: () => {
-            return Land.findAll();
-        },
-        getLandById: (id) => {
-            return Land.findOne({ where: { id } });
-        },
-        createLand: (body) => {
-            return Land.create(body);
-        },
-        updateLand: (id, body) => {
-            return Land.update(body, { where: { id } });
-        },
-        deleteLand: async (id) => {
-            return Land.destroy({ where: { id } });
-        },
-    };
+class LandRepository extends BaseRepository {
+    constructor() {
+        super(Land);
+    }
+}
 
-    return repository;
-};
+module.exports = new LandRepository();

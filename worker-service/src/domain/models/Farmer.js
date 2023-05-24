@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: { isEmail: true }
     },
-    phone: {
+    phoneNumber: {
       type: DataTypes.STRING,
     },
     profilePictureUrl: {
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    bankAccountName: {
+    bankAccountHolderName: {
       type: DataTypes.STRING,
       allowNull: true,
     },
