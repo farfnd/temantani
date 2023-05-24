@@ -1,6 +1,7 @@
 const useCases = require("../../application/use-cases/index.js");
 const repositories = require("../../domain/repositories/index.js");
 const UserEventType = require('../../domain/enums/UserEventType');
+const AdminRole = require("../../domain/enums/InventoryAdminRole");
 
 async function handle(message) {
     const type = message.type;
@@ -9,7 +10,7 @@ async function handle(message) {
         case UserEventType.ROLE_ACTIVATED:
             await handleNewUser(message);
             break;
-    
+
         default:
             break;
     }
@@ -17,10 +18,10 @@ async function handle(message) {
 
 async function handleNewUser(message) {
     try {
-        console.log('Received message:', message);
+        message = validateMessage(message);
         const adminRepo = repositories.adminRepository();
         const adminUseCase = useCases.adminUseCases(adminRepo);
-        const admin = await adminUseCase.createAdminFromMessage(message);
+        const admin = await adminUseCase.createAdmin(message);
         if (!admin) {
             return;
         }
@@ -29,5 +30,18 @@ async function handleNewUser(message) {
         console.error('Error creating admin from message:', error);
     }
 }
+
+function validateMessage(message) {
+    const adminRoles = Object.values(AdminRole);
+    const userRoles = message.roles.split(','); // Split the roles string into an array
+    const hasAdminRole = userRoles.some((role) => adminRoles.includes(role.trim()));
+
+    if (!hasAdminRole) {
+        throw new Error('User does not have a valid admin role');
+    }
+
+    delete message.roles;
+    return message;
+};
 
 module.exports = { handle };
