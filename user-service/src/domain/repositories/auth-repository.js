@@ -1,6 +1,7 @@
 const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
 const { User, Role, UserRole } = require("../models/index.js");
 const UserRegistered = require("../events/user-registered.js");
+const UserEventType = require("../enums/UserEventType.js");
 
 module.exports = (eventPublisher) => {
     const repository = {
@@ -26,7 +27,6 @@ module.exports = (eventPublisher) => {
                     })
                 );
                 
-                console.log(userRoles)
                 try {
                     await UserRole.bulkCreate(userRoles);
                 } catch (error) {
@@ -42,7 +42,7 @@ module.exports = (eventPublisher) => {
             }
 
             // Raise the UserRegistered domain event
-            const userRegisteredEvent = new UserRegistered(user);
+            const userRegisteredEvent = new UserRegistered(UserEventType.ROLE_ACTIVATED, user);
             eventPublisher.publish(userRegisteredEvent);
         },
         login: async (email, password) => {

@@ -1,5 +1,19 @@
 const useCases = require("../../application/use-cases/index.js");
 const repositories = require("../../domain/repositories/index.js");
+const UserEventType = require('../../domain/enums/UserEventType');
+
+async function handle(message) {
+    const type = message.type;
+    delete message.type;
+    switch (type) {
+        case UserEventType.ROLE_ACTIVATED:
+            await handleNewUser(message);
+            break;
+    
+        default:
+            break;
+    }
+}
 
 async function handleNewUser(message) {
     try {
@@ -16,4 +30,4 @@ async function handleNewUser(message) {
     }
 }
 
-module.exports = { handleNewUser };
+module.exports = { handle };

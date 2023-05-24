@@ -1,4 +1,3 @@
-
 const AdminRole = {
     SUPER: 'ADMIN_SUPER',
     LANDOWNER: 'ADMIN_LANDOWNER',

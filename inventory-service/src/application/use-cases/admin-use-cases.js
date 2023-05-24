@@ -20,16 +20,17 @@ module.exports = (repository) => {
         },
         createAdminFromMessage: async (message) => {
             try {
-                const newUser = JSON.parse(message.value.toString());
                 const adminRoles = Object.values(AdminRole);
                 
-                const hasAdminRole = newUser.roles.some(role => adminRoles.includes(role));
+                const userRoles = message.roles.split(','); // Split the roles string into an array
+                const hasAdminRole = userRoles.some(role => adminRoles.includes(role.trim()));
+
                 if (!hasAdminRole) {
                     console.log('User does not have a valid admin role');
                     return;
                 }
-                delete newUser.roles;
-                return repository.createAdmin(newUser);
+                delete message.roles;
+                return repository.createAdmin(message);
             } catch (error) {
                 console.error('Error creating admin from message:', error);
                 throw error;
