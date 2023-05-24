@@ -4,21 +4,22 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('WorkOffers', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
       },
-      projectId: {
-        type: Sequelize.INTEGER,
+      projectid: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Projects',
           key: 'id'
         }
       },
-      farmerId: {
-        type: Sequelize.INTEGER,
+      farmerid: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'Farmers',
