@@ -39,7 +39,8 @@ module.exports = {
       status: {
         type: Sequelize.ENUM(Object.values(AcceptableStatus)),
         allowNull: false,
-        defaultValue: 'pending'
+        defaultValue: AcceptableStatus.PENDING,
+        validate: { notNull: true, notEmpty: true, isIn: [Object.values(AcceptableStatus)] }
       },
       proof: {
         type: Sequelize.STRING,

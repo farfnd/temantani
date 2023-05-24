@@ -31,7 +31,7 @@ module.exports = {
       status: {
         type: Sequelize.ENUM(Object.values(AcceptableStatus)),
         allowNull: false,
-        defaultValue: 'pending'
+        defaultValue: AcceptableStatus.PENDING,
       },
       workContractUrl: {
         type: Sequelize.STRING,
