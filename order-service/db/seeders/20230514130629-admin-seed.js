@@ -1,16 +1,11 @@
 'use strict';
+const { create } = require('../factories/adminFactory');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const admins = [
-      { name: 'Admin' },
-      { name: 'Bambang' },
-      { name: 'Eko' }
-    ];
-    
-    // Insert user roles
-    await queryInterface.bulkInsert('Admins', admins);    
+    const admins = await create(10);
+    await queryInterface.bulkInsert('Admins', admins);
   },
 
   async down (queryInterface, Sequelize) {

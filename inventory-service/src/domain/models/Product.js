@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const ProductStatus = require('../enums/ProductStatus');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -23,15 +24,29 @@ module.exports = (sequelize, DataTypes) => {
         len: [3, 50]
       }
     },
-    description: DataTypes.TEXT,
-    price: DataTypes.INTEGER,
-    stock: DataTypes.INTEGER,
-    status: {
-      type: DataTypes.STRING,
-      values: ['pre_order', 'available', 'not_available']
+    description: {
+      type: DataTypes.TEXT
     },
-    preOrderEstimatedStock: DataTypes.INTEGER,
-    preOrderEstimatedDate: DataTypes.DATE
+    price: {
+      type: DataTypes.INTEGER
+    },
+    stock: {
+      type: DataTypes.INTEGER
+    },
+    status: {
+      type: DataTypes.ENUM(Object.values(ProductStatus)),
+      allowNull: false,
+      defaultValue: ProductStatus.AVAILABLE,
+      validate: { notNull: true, notEmpty: true, isIn: [Object.values(ProductStatus)] }
+    },
+    preOrderEstimatedStock: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    preOrderEstimatedDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
   }, {
     sequelize,
     modelName: 'Product',

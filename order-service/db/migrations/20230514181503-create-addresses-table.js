@@ -35,7 +35,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      phone: {
+      postalCode: {
+        type: Sequelize.STRING(5),
+        allowNull: false
+      },
+      phoneNumber: {
         type: Sequelize.STRING,
         allowNull: false
       },

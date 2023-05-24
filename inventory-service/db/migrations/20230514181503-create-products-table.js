@@ -25,7 +25,7 @@ module.exports = {
       status: {
         type: Sequelize.ENUM(Object.values(ProductStatus)),
         allowNull: false,
-        defaultValue: ProductStatus.AVAILABLE
+        defaultValue: ProductStatus.AVAILABLE,
       },
       preOrderEstimatedStock: {
         type: Sequelize.INTEGER,

@@ -49,7 +49,7 @@ module.exports = {
       order_status: {
         type: Sequelize.ENUM(Object.values(OrderStatus)),
         allowNull: false,
-        defaultValue: 'pending',
+        defaultValue: OrderStatus.PENDING,
       },
       transaction_id: {
         type: Sequelize.STRING,
