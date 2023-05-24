@@ -1,19 +1,21 @@
 // KafkaConsumer.js
 const Kafka = require('../kafka');
-const handlers = require('../../interfaces/handlers');
+const handlers = require('../../interfaces/event-handlers');
 
 class KafkaConsumer {
     constructor(bootstrapServer) {
         this.kafka = new Kafka(bootstrapServer);
-        // Define your consumer topics
-        this.userConsumerTopic = 'user-topic';
+        // Define your consumer topics and their corresponding handlers
+        this.topicToHandlerMap = {
+            'user-topic': handlers.userTopicHandler,
+        };
     }
 
     async start() {
         try {
-            const consumer = await this.kafka.createConsumer([
-                { topic: this.userConsumerTopic },
-            ]);
+            const consumer = await this.kafka.createConsumer(
+                Object.keys(this.topicToHandlerMap).map(topic => ({ topic }))
+            );
 
             console.log('Kafka consumer created');
 
@@ -26,13 +28,11 @@ class KafkaConsumer {
                     return;
                 }
                 
-                // Call the appropriate topic handler based on the received message's topic
-                switch (message.topic) {
-                    case this.userConsumerTopic:
-                        handlers.userTopicHandler.handle(value);
-                        break;
-                    default:
-                        console.log(`No handler found for topic: ${message.topic}`);
+                const handler = this.topicToHandlerMap[message.topic];
+                if (handler) {
+                    handler.handle(value);
+                } else {
+                    console.log(`No handler found for topic: ${message.topic}`);
                 }
             });
         } catch (error) {

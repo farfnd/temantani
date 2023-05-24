@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-const OrderStatus = require('../../src/domain/enums/OrderStatus');
+const OrderStatus = require('../enums/OrderStatus');
 
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
