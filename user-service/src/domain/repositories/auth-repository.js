@@ -57,7 +57,9 @@ module.exports = (eventPublisher) => {
                         }),
                     };
                 } else {
-                    throw new Error("Authentication Failed");
+                    error = new Error("Invalid email or password");
+                    error.status = 401;
+                    throw error;
                 }
             } catch (error) {
                 throw error;

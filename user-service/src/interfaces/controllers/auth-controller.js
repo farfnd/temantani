@@ -12,10 +12,10 @@ module.exports = (usecase) => {
         },
         login: async (req, res) => {
             try {
-                const data = await usecase.login(req.body.email, req.body.password)
-                res.status(200).json(data)
+                const data = await usecase.login(req.body.email, req.body.password);
+                res.status(200).json(data);
             } catch (error) {
-                res.status(500).json(error)
+                res.status(error.status).json(error.message);
             }
         }
     };
