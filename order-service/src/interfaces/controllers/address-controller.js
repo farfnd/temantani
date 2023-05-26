@@ -1,8 +1,13 @@
 module.exports = (usecase) => {
     const controller = {
-        index: async (_, res) => {
+        index: async (req, res) => {
             try {
-                const data = await usecase.getAll()
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getAll();
+                } else {
+                    data = await usecase.find({ userId: req.user.id });
+                }
                 res.send(data)
             } catch (error) {
                 res.statusCode = 500
@@ -12,7 +17,15 @@ module.exports = (usecase) => {
 
         show: async (req, res) => {
             try {
-                const data = await usecase.getById(req.params.id)
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getById(req.params.id);
+                } else {
+                    data = await usecase.find({ 
+                        id: req.params.id,
+                        userId: req.user.id
+                    });
+                }
                 res.send(data)
             } catch (error) {
                 res.statusCode = 500
@@ -22,6 +35,7 @@ module.exports = (usecase) => {
 
         store: async (req, res) => {
             try {
+                req.body.userId = req.user.id
                 await usecase.create(req.body)
                 res.status(200).json({
                     message: "success"
