@@ -2,14 +2,14 @@ const express = require('express');
 const { json } = require('express');
 const app = express();
 const cors = require('cors');
-const kafka = require('kafka-node');
 const routes = require('./interfaces/routes');
 const KafkaProducer = require('./infrastructure/services/kafka-producer');
 const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
+const config = require('./config');
 
 require('dotenv').config();
-const port = process.env.PORT || 4003;
-const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
+const port = config.port;
+const kafkaBootstrapServer = config.kafkaBootstrapServer;
 
 const kafkaProducer = new KafkaProducer(kafkaBootstrapServer);
 const kafkaConsumer = new KafkaConsumer(kafkaBootstrapServer);

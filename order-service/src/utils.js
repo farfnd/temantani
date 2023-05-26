@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const secret = "$2b$10$OstRst1LWEfDyKEGdKcOKO";
 
@@ -21,4 +22,8 @@ const verifyJwt = (token) => {
   return jwt.verify(token, secret);
 };
 
-module.exports = { hashPassword, comparePassword, generateJwt, verifyJwt };
+const verifySHA512 = (actual, expected) => {
+  return actual === crypto.createHash('sha512').update(expected).digest('hex');
+};
+
+module.exports = { hashPassword, comparePassword, generateJwt, verifyJwt, verifySHA512 };

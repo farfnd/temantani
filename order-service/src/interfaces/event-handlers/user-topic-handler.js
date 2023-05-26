@@ -57,7 +57,10 @@ async function handleNewUser(message) {
     try {
         const userRepo = repositories.userRepository;
         const userUseCase = useCases.userUseCases(userRepo);
-        const user = await userUseCase.create(message);
+        const user = await userUseCase.create({
+            id: message.userId,
+            ...message,
+        });
         if (!user) {
             return;
         }

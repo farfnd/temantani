@@ -11,6 +11,7 @@ router.use(middlewares.auth);
 router.get("/", orderController.index);
 router.get("/:id", orderController.show);
 router.post("/", orderController.store);
+router.post("/payment", orderController.storePayment);
 router.put("/:id", orderController.update);
 router.delete("/:id", orderController.destroy);
 
