@@ -1,4 +1,5 @@
 const AbstractUseCase = require('./abstracts/base-use-cases');
+const OrderStatus = require('../../domain/enums/OrderStatus');
 
 class OrderUseCase extends AbstractUseCase {
     constructor(repository) {

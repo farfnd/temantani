@@ -2,7 +2,7 @@ const midtrans = require('../../infrastructure/midtrans');
 const config = require('../../config');
 const { verifySHA512 } = require('../../utils');
 
-module.exports = () => {
+module.exports = (usecase) => {
     const controller = {
         index: async (_, res) => {
             try {
