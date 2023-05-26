@@ -10,7 +10,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      user_id: {
+      userId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -18,7 +18,7 @@ module.exports = {
           key: 'id',
         },
       },
-      address_id: {
+      addressId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -28,7 +28,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      product_id: {
+      productId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -42,35 +42,35 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      shipping_cost: {
+      shippingCost: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      order_status: {
+      orderStatus: {
         type: Sequelize.ENUM(Object.values(OrderStatus)),
-        allowNull: false,
+        allowNull: true,
         defaultValue: OrderStatus.PENDING,
       },
-      transaction_id: {
+      transactionId: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      payment_method: {
+      paymentMethod: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      payment_amount: {
+      paymentAmount: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
       createdAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });

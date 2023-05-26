@@ -4,6 +4,7 @@ const { User } = require('../../src/domain/models'); // Replace with your actual
 
 const generate = () => {
     return {
+        name: faker.person.fullName(),
         address: faker.location.streetAddress(),
         subdistrict: faker.location.county(),
         district: faker.location.state(),

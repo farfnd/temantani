@@ -1,4 +1,4 @@
-const { fakerID_ID } = require('@faker-js/faker');
+const { fakerID_ID: faker } = require('@faker-js/faker');
 const ProductStatus = require('../../src/domain/enums/ProductStatus');
 
 const generate = () => {

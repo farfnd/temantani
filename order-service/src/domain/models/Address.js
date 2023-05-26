@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true,
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     address: {
       type: DataTypes.STRING,
       allowNull: false
@@ -33,6 +37,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    postalCode: {
+      type: DataTypes.STRING(5),
+      allowNull: false
+    },
+    phoneNumber: {
       type: DataTypes.STRING,
       allowNull: false
     },

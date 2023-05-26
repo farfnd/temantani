@@ -19,6 +19,10 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       address: {
         type: Sequelize.STRING,
         allowNull: false

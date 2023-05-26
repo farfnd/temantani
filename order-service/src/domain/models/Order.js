@@ -7,9 +7,9 @@ const OrderStatus = require('../enums/OrderStatus');
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
-      Order.belongsTo(models.User, { foreignKey: 'user_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-      Order.belongsTo(models.Address, { foreignKey: 'address_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-      Order.belongsTo(models.Product, { foreignKey: 'product_id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Order.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Order.belongsTo(models.Address, { foreignKey: 'addressId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Order.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     }
   }
 
@@ -20,15 +20,15 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false,
     },
-    user_id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    address_id: {
+    addressId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    product_id: {
+    productId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -36,37 +36,27 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    shipping_cost: {
+    shippingCost: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    order_status: {
+    orderStatus: {
       type: DataTypes.ENUM(Object.values(OrderStatus)),
-      allowNull: false,
+      allowNull: true,
       defaultValue: OrderStatus.PENDING,
     },
-    transaction_id: {
+    transactionId: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    payment_method: {
+    paymentMethod: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    payment_amount: {
+    paymentAmount: {
       type: DataTypes.INTEGER,
       allowNull: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+    }
   }, {
     sequelize,
     modelName: 'Order',
