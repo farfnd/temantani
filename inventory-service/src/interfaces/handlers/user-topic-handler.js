@@ -19,7 +19,7 @@ async function handle(message) {
 async function handleNewUser(message) {
     try {
         message = validateMessage(message);
-        const adminRepo = repositories.adminRepository;
+        const adminRepo = new repositories.AdminRepository();
         const adminUseCase = useCases.adminUseCases(adminRepo);
         const admin = await adminUseCase.create(message);
         if (!admin) {
@@ -27,7 +27,7 @@ async function handleNewUser(message) {
         }
         console.log('New admin created');
     } catch (error) {
-        console.error('Error creating admin from message:', error);
+        console.error('Error creating admin from message:', error.message);
     }
 }
 
@@ -37,7 +37,7 @@ function validateMessage(message) {
     const hasAdminRole = userRoles.some((role) => adminRoles.includes(role.trim()));
 
     if (!hasAdminRole) {
-        throw new Error('User does not have a valid admin role');
+        throw new Error('User does not have admin role');
     }
 
     delete message.roles;
