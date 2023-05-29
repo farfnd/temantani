@@ -1,4 +1,5 @@
 const { hashPassword } = require('../../support/helpers.js');
+const { createRules, updateRules, validate } = require('../../application/validators/work-offer-validator.js');
 
 module.exports = (usecase) => {
     const controller = {
@@ -22,35 +23,45 @@ module.exports = (usecase) => {
             }
         },
 
-        store: async (req, res) => {
-            try {
-                const body = {
-                    name: req.body.name,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                };
-                await usecase.create(body);
-                res.status(200).json({
-                    message: "success",
-                });
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        },
-
-        update: async (req, res) => {
-            try {
-                if (req.body.password) {
-                    req.body.password = hashPassword(req.body.password);
+        store: [
+            createRules,
+            validate,
+            async (req, res) => {
+                try {
+                    const body = {
+                        projectId: req.body.projectId,
+                        workerId: req.body.workerId,
+                        adminId: req.body.adminId,
+                        status: req.body.status,
+                        workContractUrl: req.body.workContractUrl,
+                    };
+                    await usecase.create(body);
+                    res.status(200).json({
+                        message: 'success',
+                    });
+                } catch (error) {
+                    res.status(500).json(error);
                 }
-                await usecase.update(req.params.id, req.body);
-                res.status(200).json({
-                    message: "success",
-                });
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        },
+            },
+        ],
+
+        update: [
+            updateRules,
+            validate,
+            async (req, res) => {
+                try {
+                    if (req.body.password) {
+                        req.body.password = hashPassword(req.body.password);
+                    }
+                    await usecase.update(req.params.id, req.body);
+                    res.status(200).json({
+                        message: "success",
+                    });
+                } catch (error) {
+                    res.status(500).json(error);
+                }
+            },
+        ],
 
         destroy: async (req, res) => {
             try {
