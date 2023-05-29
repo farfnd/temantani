@@ -9,10 +9,9 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true
       },
-      projectid: {
+      projectId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -20,7 +19,7 @@ module.exports = {
           key: 'id'
         }
       },
-      farmerid: {
+      farmerId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -57,5 +56,6 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('WorkOffers');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_WorkOffers_status";');
   }
 };
