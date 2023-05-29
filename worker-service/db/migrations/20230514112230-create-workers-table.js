@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Farmers', {
+    await queryInterface.createTable('Workers', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
@@ -16,6 +16,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
+      },
+      street: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      city: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      postalCode: {
+        type: Sequelize.STRING(5),
+        allowNull: false
       },
       phoneNumber: {
         type: Sequelize.STRING,
@@ -50,6 +62,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Farmers');
+    await queryInterface.dropTable('Workers');
   }
 };

@@ -5,6 +5,7 @@
   "author": "FARHAN",
   "license": "MIT",
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "bcrypt": "^5.0.1",
     "camelcase": "^7.0.1",
     "cors": "^2.8.5",

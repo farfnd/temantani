@@ -32,7 +32,7 @@ async function handleNewUser(message) {
     delete message.roles;
 
     if (hasWorkerRole) {
-        await handleNewFarmer(message);
+        await handleNewWorker(message);
     } else if (hasAdminRole) {
         await handleNewAdmin(message);
     }
@@ -54,17 +54,17 @@ async function handleNewAdmin(message) {
     }
 }
 
-async function handleNewFarmer(message) {
+async function handleNewWorker(message) {
     try {
-        const farmerRepo = new repositories.FarmerRepository();
-        const farmerUseCase = useCases.farmerUseCases(farmerRepo);
-        const farmer = await farmerUseCase.create(message);
-        if (!farmer) {
+        const workerRepo = new repositories.WorkerRepository();
+        const workerUseCase = useCases.workerUseCases(workerRepo);
+        const worker = await workerUseCase.create(message);
+        if (!worker) {
             return;
         }
-        console.log('New farmer created');
+        console.log('New worker created');
     } catch (error) {
-        console.error('Error creating farmer from message:', error);
+        console.error('Error creating worker from message:', error);
         return;
     }
 }
