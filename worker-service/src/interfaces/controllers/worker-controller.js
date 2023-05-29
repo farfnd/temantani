@@ -1,4 +1,4 @@
-const { hashPassword } = require('../../utils.js');
+const { hashPassword } = require('../../support/helpers.js');
 
 module.exports = (usecase) => {
     const controller = {

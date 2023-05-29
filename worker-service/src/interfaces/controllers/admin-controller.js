@@ -22,19 +22,13 @@ module.exports = (usecase) => {
             }
         },
 
-        store: async (req, res) => {
+        getCurrentAdmin: async (req, res) => {
             try {
-                const body = {
-                    name: req.body.name,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                };
-                await usecase.create(body);
-                res.status(200).json({
-                    message: "success",
-                });
+                const data = await usecase.getById(req.user.id);
+                res.send(data);
             } catch (error) {
-                res.status(500).json(error);
+                res.statusCode = 500;
+                res.send(error);
             }
         },
 
@@ -43,18 +37,7 @@ module.exports = (usecase) => {
                 if (req.body.password) {
                     req.body.password = hashPassword(req.body.password);
                 }
-                await usecase.update(req.params.id, req.body);
-                res.status(200).json({
-                    message: "success",
-                });
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        },
-
-        destroy: async (req, res) => {
-            try {
-                await usecase.delete(req.params.id);
+                await usecase.update(req.user.id, req.body);
                 res.status(200).json({
                     message: "success",
                 });

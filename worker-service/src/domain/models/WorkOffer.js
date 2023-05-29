@@ -5,19 +5,21 @@ const {
 const AcceptableStatus = require('../enums/AcceptableStatus');
 
 module.exports = (sequelize, DataTypes) => {
-  class Project extends Model {
+  class WorkOffer extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      //
+      WorkOffer.belongsTo(models.Project, { foreignKey: 'projectId', as: 'project' });
+      WorkOffer.belongsTo(models.Worker, { foreignKey: 'workerId', as: 'worker' });
+      WorkOffer.belongsTo(models.Admin, { foreignKey: 'adminId', as: 'admin' });
     }
   }
-  Project.init({
+  WorkOffer.init({
     projectId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Projects',
@@ -25,11 +27,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
     },
-    farmerId: {
-      type: DataTypes.INTEGER,
+    workerId: {
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Farmers',
+        model: 'Workers',
+        key: 'id'
+      },
+      validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
+    },
+    adminId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Admins',
         key: 'id'
       },
       validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
@@ -47,13 +58,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Project',
+    modelName: 'WorkOffer',
     indexes: [
       {
         unique: true,
-        fields: ['projectId', 'farmerId']
+        fields: ['projectId', 'workerId']
       }
     ]
   });
-  return Project;
+  return WorkOffer;
 };

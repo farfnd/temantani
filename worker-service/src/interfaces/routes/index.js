@@ -1,11 +1,7 @@
-const customRoutes = require('./custom-routes.js');
-const farmerRoutes = require('./farmer-routes.js');
-const workOfferRoutes = require('./work-offer-routes.js');
-const workReportRoutes = require('./work-report-routes.js');
+const adminRoutes = require('./admin');
+const workerRoutes = require('./worker');
 
-module.exports = function (app) {
-    customRoutes(app);
-    farmerRoutes(app);
-    workOfferRoutes(app);
-    workReportRoutes(app);
+module.exports = function (app, producer) {
+    adminRoutes(app, producer);
+    workerRoutes(app, producer);
 };

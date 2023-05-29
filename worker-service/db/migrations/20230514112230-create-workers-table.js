@@ -1,4 +1,5 @@
 'use strict';
+const WorkAvailability = require('../../src/domain/enums/WorkAvailability');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -17,37 +18,10 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      street: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      city: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      postalCode: {
-        type: Sequelize.STRING(5),
-        allowNull: false
-      },
-      phoneNumber: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      profilePictureUrl: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bank: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccountNumber: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bankAccountHolderName: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      workAvailability: {
+        type: Sequelize.ENUM(Object.values(WorkAvailability)),
+        allowNull: false,
+        defaultValue: WorkAvailability.AVAILABLE
       },
       createdAt: {
         allowNull: false,

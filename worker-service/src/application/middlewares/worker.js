@@ -1,5 +1,6 @@
 const { toLower } = require("lodash");
-const { verifyJwt } = require("../../utils.js");
+const { verifyJwt } = require("../../support/helpers.js");
+const UserRoles = require('../../domain/enums/UserRole.js')
 
 module.exports = function (req, res, next) {
     try {
@@ -9,16 +10,16 @@ module.exports = function (req, res, next) {
 
         // Check if the user has an admin role
         console.log(decoded);
-        const isAdmin = decoded.roles.some(role => toLower(role).startsWith('admin'));
+        const isWorker = decoded.roles.some(role => role === UserRoles.WORKER);
 
-        if (isAdmin) {
+        if (isWorker) {
             // User is an admin
             next();
         } else {
             // User is not an admin
             res.statusCode = 403;
             res.send({
-                message: 'Access denied. User is not an admin.',
+                message: 'Access denied. User is not a worker.',
             });
         }
     } catch (error) {

@@ -19,13 +19,21 @@ module.exports = {
           key: 'id'
         }
       },
-      farmerId: {
+      workerId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Farmers',
+          model: 'Workers',
           key: 'id'
         }
+      },
+      adminId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'Admins',
+          key: 'id'
+        },
       },
       status: {
         type: Sequelize.ENUM(Object.values(AcceptableStatus)),
@@ -49,7 +57,7 @@ module.exports = {
     }, {
       uniqueKeys: {
           actions_unique: {
-              fields: ['projectId', 'farmerId']
+              fields: ['projectId', 'workerId']
           }
       }
     });

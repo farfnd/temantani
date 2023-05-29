@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const WorkAvailability = require('../enums/WorkAvailability');
+
 module.exports = (sequelize, DataTypes) => {
   class Worker extends Model {
     /**
@@ -10,7 +12,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Worker.hasMany(models.WorkerSkill, { foreignKey: 'workerId' });
+        Worker.hasMany(models.WorkOffer, {
+            as: 'workOffers',
+            foreignKey: 'workerId',
+        });
+        Worker.hasMany(models.WorkReport, {
+            as: 'workReports',
+            foreignKey: 'workerId',
+        });
     }
   }
   Worker.init({
@@ -20,29 +29,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      unique: true
+    },
+    workAvailability: {
+      type: DataTypes.ENUM(Object.values(WorkAvailability)),
       allowNull: false,
-      unique: true,
-      validate: { isEmail: true }
-    },
-    phoneNumber: {
-      type: DataTypes.STRING,
-    },
-    profilePictureUrl: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: { isUrl: true }
-    },
-    bank: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    bankAccountNumber: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    bankAccountHolderName: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      defaultValue: WorkAvailability.AVAILABLE
     },
   }, {
     sequelize,
