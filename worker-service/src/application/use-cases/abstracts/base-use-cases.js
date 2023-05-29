@@ -3,28 +3,28 @@ class AbstractUseCase {
         this.repository = repository;
     }
 
-    getAll() {
-        return this.repository.getAll();
+    getAll(options = {}) {
+        return this.repository.getAll(options);
     }
 
-    getById(id) {
-        return this.repository.getById(id);
+    getById(id, options = {}) {
+        return this.repository.getById(id, options);
     }
 
-    find(query) {
-        return this.repository.find(query);
+    find(query, options = {}) {
+        return this.repository.find(query, options);
     }
 
-    create(data) {
-        return this.repository.create(data);
+    create(data, options = {}) {
+        return this.repository.create(data, options);
     }
 
-    update(id, data) {
-        return this.repository.update(id, data);
+    update(id, data, options = {}) {
+        return this.repository.update(id, data, options);
     }
 
-    delete(id) {
-        return this.repository.delete(id);
+    delete(id, options = {}) {
+        return this.repository.delete(id, options);
     }
 }
 
