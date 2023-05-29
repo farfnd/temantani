@@ -7,4 +7,4 @@ class ProductRepository extends BaseRepository {
     }
 }
 
-module.exports = new ProductRepository();
+module.exports = ProductRepository;

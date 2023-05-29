@@ -7,4 +7,4 @@ class AddressRepository extends BaseRepository {
     }
 }
 
-module.exports = new AddressRepository();
+module.exports = AddressRepository;

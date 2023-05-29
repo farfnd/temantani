@@ -1,10 +1,13 @@
 const { Order, Address, User } = require('../models');
 const BaseRepository = require('./abstracts/base-repository');
+const OrderCreated = require('../events/order-created');
+const OrderEventType = require("../enums/OrderEventType");
 
 class OrderRepository extends BaseRepository {
-    constructor() {
+    constructor(eventPublisher) {
         super(Order);
-    }
+        this.eventPublisher = eventPublisher;
+    }    
 
     async create(data, options = {}) {
         const { addressId, userId } = data;
@@ -20,8 +23,21 @@ class OrderRepository extends BaseRepository {
             throw new Error('Address not found');
         }
         
-        return super.create(data, options);
+        const createdOrder = await super.create(data, options);
+
+        let order;
+        try {
+            order = await Order.findByPk(createdOrder.id, { include: [Address, User] });
+        } catch (error) {
+            throw error;
+        }
+        
+        // Publish the order created event
+        const orderCreatedEvent = new OrderCreated(OrderEventType.ORDER_CREATED, order);
+        this.eventPublisher.publish(orderCreatedEvent);
+
+        return order;
     }
 }
 
-module.exports = new OrderRepository();
+module.exports = OrderRepository;
