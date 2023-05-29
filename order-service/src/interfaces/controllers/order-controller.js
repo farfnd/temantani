@@ -1,10 +1,11 @@
 const midtrans = require('../../infrastructure/midtrans');
-const config = require('../../config');
-const { verifySHA512 } = require('../../utils');
+const config = require('../../support/config');
+const { verifySHA512 } = require('../../support/helpers');
+const { sequelize } = require('../../domain/models');
 
 module.exports = (usecase) => {
     const controller = {
-        index: async (_, res) => {
+        index: async (req, res) => {
             try {
                 let data;
                 if (req.user.roles.some(role => role.includes('ADMIN'))) {
@@ -12,10 +13,10 @@ module.exports = (usecase) => {
                 } else {
                     data = await usecase.find({ userId: req.user.id });
                 }
-                res.send(data)
+                if(data.length === 0) return res.status(404).json('Data is empty');
+                return res.send(data)
             } catch (error) {
-                res.statusCode = 500
-                res.send(error)
+                return res.status(500).send(error)
             }
         },
 
@@ -30,28 +31,39 @@ module.exports = (usecase) => {
                         userId: req.user.id
                     });
                 }
-                res.send(data)
+                if(data.length === 0) return res.status(404).json('Order not found');
+                return res.send(data)
             } catch (error) {
-                res.statusCode = 500
-                res.send(error)
+                return res.status(500).send(error)
             }
         },
 
         store: async (req, res) => {
             try {
                 req.body.userId = req.user.id;
-                const createdOrder = await usecase.create(req.body);
-                
-                const midtransService = new midtrans();
-                const transactionData = await midtransService.createTransactionToken(createdOrder)
-                console.log('transaction:',transactionData);
 
-                res.status(200).json({
-                    message: "success",
-                    ...transactionData
-                })
+                const t = await sequelize.transaction();
+
+                try {
+                    // Create the order within the transaction
+                    const createdOrder = await usecase.create(req.body);
+                    
+                    const midtransService = new midtrans();
+                    const transactionData = await midtransService.createTransactionToken(createdOrder);
+                    console.log('transaction:',transactionData);
+
+                    await t.commit();
+
+                    res.status(200).json({
+                        message: "success",
+                        ...transactionData
+                    });
+                } catch (error) {
+                    await t.rollback();
+                    throw error;
+                }
             } catch (error) {
-                res.status(500).json(error.message)
+                res.status(error.status).json(error.message)
             }
         },
 
@@ -86,25 +98,31 @@ module.exports = (usecase) => {
                 payment_type,
                 signature_key
             } = req.body;
+            
+            if (status_code !== '200') {
+                return res.status(200).json({
+                    message: "Order status is not updated as payment is not a success"
+                })
+            }
+
             const serverKey = config.midtransServerKey;
             const check = order_id + status_code + gross_amount + serverKey;
-            if(verifySHA512(signature_key, check)) {
+            if (verifySHA512(signature_key, check)) {
                 try {
-                    await usecase.updatePaymentStatus(
+                    await usecase.paymentPaid(
                         order_id,
                         transaction_id,
-                        status_code,
                         parseInt(gross_amount),
                         payment_type
                     );
-                    res.status(200).json({
+                    return res.status(200).json({
                         message: "Payment status updated"
                     })
                 } catch (error) {
-                    res.status(500).json(error.message)
+                    return res.status(error.status).json(error.message)
                 }
             } else {
-                res.status(400).json({
+                return res.status(400).json({
                     message: 'Invalid signature'
                 });
             }

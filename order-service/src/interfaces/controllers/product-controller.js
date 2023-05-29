@@ -5,8 +5,7 @@ module.exports = (usecase) => {
                 const data = await usecase.getAll()
                 res.send(data)
             } catch (error) {
-                res.statusCode = 500
-                res.send(error)
+                res.status(error.status || 500).json(error.message);
             }
         },
 
@@ -15,8 +14,7 @@ module.exports = (usecase) => {
                 const data = await usecase.getById(req.params.id)
                 res.send(data)
             } catch (error) {
-                res.statusCode = 500
-                res.send(error)
+                res.status(error.status || 500).json(error.message);
             }
         },
 
