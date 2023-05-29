@@ -25,14 +25,14 @@ async function handleNewUser(message) {
     const hasAdminRole = userRoles.some((role) => adminRoles.includes(role.trim()));
 
     if (!hasBuyerRole && !hasAdminRole) {
-        console.log('User does not have a valid worker role');
+        console.log('User does not have a valid buyer role');
         return;
     }
 
     delete message.roles;
 
     if (hasBuyerRole) {
-        await handleNewUser(message);
+        await handleNewBuyer(message);
     } else if (hasAdminRole) {
         await handleNewAdmin(message);
     }
@@ -53,7 +53,7 @@ async function handleNewAdmin(message) {
     }
 }
 
-async function handleNewUser(message) {
+async function handleNewBuyer(message) {
     try {
         const userRepo = new repositories.UserRepository();
         const userUseCase = useCases.userUseCases(userRepo);
