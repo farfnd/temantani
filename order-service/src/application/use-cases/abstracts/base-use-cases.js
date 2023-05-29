@@ -8,11 +8,11 @@ class AbstractUseCase {
     }
 
     getById(id, options = {}) {
-        return this.repository.getById({ where: { id }, ...options });
+        return this.repository.getById(id, options);
     }
 
     find(query, options = {}) {
-        return this.repository.find({ where: query, ...options });
+        return this.repository.find(query, options);
     }
 
     create(data, options = {}) {
@@ -20,11 +20,11 @@ class AbstractUseCase {
     }
 
     update(id, data, options = {}) {
-        return this.repository.update(data, { where: { id }, ...options });
+        return this.repository.update(id, data, options);
     }
 
     delete(id, options = {}) {
-        return this.repository.delete({ where: { id }, ...options });
+        return this.repository.delete(id, options);
     }
 }
 
