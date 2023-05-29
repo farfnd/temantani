@@ -14,7 +14,7 @@ class KafkaProducer {
                     messages: [message],
                 },
             ];
-            producer.send(payloads, (error, data) => {
+            this.producer.send(payloads, (error, data) => {
                 if (error) {
                     console.error('Error publishing message to Kafka:', error);
                 } else {
