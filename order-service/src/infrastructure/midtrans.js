@@ -1,5 +1,6 @@
-const config = require('../config');
+const config = require('../support/config');
 const midtransClient = require('midtrans-client');
+const moment = require('moment');
 
 class MidtransService {
     createItemDetails(product, order) {
@@ -46,7 +47,7 @@ class MidtransService {
 
             let snap = new midtransClient.Snap({
                 isProduction : config.env === 'production',
-                serverKey : config.midtransServerKey
+                serverKey : config.midtrans.serverKey
             });
 
             let parameter = {
@@ -65,6 +66,11 @@ class MidtransService {
                     ...this.createItemDetails(product, order),
                     ...this.createShippingFeeItem(order)
                 ],
+                expiry: {
+                    start_time: moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss Z'),
+                    unit: config.midtrans.expiry.unit,
+                    duration: config.midtrans.expiry.duration
+                }
             };
 
             return new Promise((resolve, reject) => {
