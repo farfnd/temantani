@@ -10,6 +10,7 @@ class EventPublisher {
     async publish(event) {
         console.log("Publishing event to Kafka");
         const message = JSON.stringify(event);
+        console.log(message)
 
         try {
             const topic = this.topicMapping[event.constructor.name];

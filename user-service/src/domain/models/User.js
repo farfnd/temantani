@@ -24,16 +24,42 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: { isEmail: true }
+      unique: true
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
     },
     phoneNumber: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    profilePictureUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bank: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bankAccountNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bankAccountHolderName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    street: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    postalCode: {
+      type: DataTypes.STRING(5),
+      allowNull: true
     },
   }, {
     sequelize,

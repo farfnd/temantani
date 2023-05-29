@@ -6,7 +6,8 @@ module.exports = {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()'),
-        primaryKey: true,
+        allowNull: false,
+        primaryKey: true
       },
       name: {
         type: Sequelize.STRING
@@ -16,10 +17,42 @@ module.exports = {
         unique: true
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       phoneNumber: {
         type: Sequelize.STRING,
+      },
+      street: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      city: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      postalCode: {
+        type: Sequelize.STRING(5),
+        allowNull: true
+      },
+      phoneNumber: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      profilePictureUrl: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      bank: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      bankAccountNumber: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      bankAccountHolderName: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

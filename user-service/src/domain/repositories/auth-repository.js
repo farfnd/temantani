@@ -6,12 +6,12 @@ const UserEventType = require("../enums/UserEventType.js");
 module.exports = (eventPublisher) => {
     const repository = {
         register: async (body) => {
-            const { roles, ...userBody } = body; // Extract roles from request body
-            userBody.password = hashPassword(userBody.password); // Hash password
+            const { roles, ...userBody } = body;
+            userBody.password = hashPassword(userBody.password); 
 
             let createdUser;
             try {
-                createdUser = await User.create(userBody); // Create user without roles
+                createdUser = await User.create(userBody);
             } catch (error) {
                 throw error;
             }
@@ -43,6 +43,7 @@ module.exports = (eventPublisher) => {
 
             // Raise the UserRegistered domain event
             const userRegisteredEvent = new UserRegistered(UserEventType.ROLE_ACTIVATED, user);
+            console.log(userRegisteredEvent);
             eventPublisher.publish(userRegisteredEvent);
         },
         login: async (email, password) => {

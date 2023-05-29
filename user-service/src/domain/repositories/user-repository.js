@@ -1,7 +1,6 @@
 const { User, Role, UserRoles } = require('../models');
 
 module.exports = () => {
-    const selectProps = ['id', 'email', 'name', 'phone'];
     const repository = {
         getAllUsers: () => {
             return User.findAll({
