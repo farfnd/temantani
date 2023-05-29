@@ -41,7 +41,7 @@ async function handleNewUser(message) {
 
 async function handleNewAdmin(message) {
     try {
-        const adminRepo = repositories.adminRepository();
+        const adminRepo = new repositories.AdminRepository();
         const adminUseCase = useCases.adminUseCases(adminRepo);
         const admin = await adminUseCase.createAdmin(message);
         if (!admin) {
@@ -50,12 +50,13 @@ async function handleNewAdmin(message) {
         console.log('New admin created');
     } catch (error) {
         console.error('Error creating admin from message:', error);
+        return;
     }
 }
 
 async function handleNewFarmer(message) {
     try {
-        const farmerRepo = repositories.farmerRepository;
+        const farmerRepo = new repositories.FarmerRepository();
         const farmerUseCase = useCases.farmerUseCases(farmerRepo);
         const farmer = await farmerUseCase.create(message);
         if (!farmer) {
@@ -64,6 +65,7 @@ async function handleNewFarmer(message) {
         console.log('New farmer created');
     } catch (error) {
         console.error('Error creating farmer from message:', error);
+        return;
     }
 }
 

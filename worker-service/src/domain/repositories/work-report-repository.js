@@ -7,4 +7,4 @@ class WorkReportRepository extends BaseRepository {
     }
 }
 
-module.exports = new WorkReportRepository();
+module.exports = WorkReportRepository;

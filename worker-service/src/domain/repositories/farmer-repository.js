@@ -7,4 +7,4 @@ class FarmerRepository extends BaseRepository {
     }
 }
 
-module.exports = new FarmerRepository();
+module.exports = FarmerRepository;

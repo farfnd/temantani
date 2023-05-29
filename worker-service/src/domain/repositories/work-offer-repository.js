@@ -7,4 +7,4 @@ class WorkOfferRepository extends BaseRepository {
     }
 }
 
-module.exports = new WorkOfferRepository();
+module.exports = WorkOfferRepository;

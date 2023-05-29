@@ -7,4 +7,4 @@ class AdminRepository extends BaseRepository {
     }
 }
 
-module.exports = new AdminRepository();
+module.exports = AdminRepository;

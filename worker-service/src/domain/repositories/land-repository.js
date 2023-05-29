@@ -7,4 +7,4 @@ class LandRepository extends BaseRepository {
     }
 }
 
-module.exports = new LandRepository();
+module.exports = LandRepository;

@@ -7,4 +7,4 @@ class ProjectRepository extends BaseRepository {
     }
 }
 
-module.exports = new ProjectRepository();
+module.exports = ProjectRepository;
