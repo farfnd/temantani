@@ -43,7 +43,7 @@ async function handleNewAdmin(message) {
     try {
         const adminRepo = new repositories.AdminRepository();
         const adminUseCase = useCases.adminUseCases(adminRepo);
-        const admin = await adminUseCase.createAdmin(message);
+        const admin = await adminUseCase.create(message);
         if (!admin) {
             return;
         }
