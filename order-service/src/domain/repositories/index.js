@@ -17,8 +17,8 @@ fs.readdirSync(__dirname)
     })
     .forEach(file => {
         const name = replace(startCase(file.slice(0, -3)), /\s/g, '');
-        const middleware = require(path.join(__dirname, file));
-        files[name] = middleware;
+        const repository = require(path.join(__dirname, file));
+        files[name] = repository;
     });
 
 module.exports = files;
