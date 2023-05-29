@@ -1,22 +1,10 @@
-const { express, controllers, repositories, useCases, middlewares } = require('./abstracts/common.js');
+const { Router } = require('express');
 
-const router = express.Router();
+const router = Router();
 
-const productRepo = repositories.productRepository;
-const productUseCase = useCases.productUseCases(productRepo);
-const productController = controllers.productController(productUseCase);
+module.exports = (app, controller) => {
+    router.get("/", controller.index);
+    router.get("/:id", controller.show);
 
-router.use((req, res, next) => {
-    if (req.method !== 'GET') {
-        middlewares.admin(req, res, next);
-    } else {
-        next();
-    }
-});
-
-router.get("/", productController.index);
-router.get("/:id", productController.show);
-
-module.exports = (app) => {
     app.use('/products', router);
 };

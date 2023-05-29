@@ -1,19 +1,13 @@
-const { express, controllers, repositories, useCases, middlewares } = require('./abstracts/common.js');
+const { Router } = require('express');
 
-const router = express.Router();
+const router = Router();
 
-const addressRepo = repositories.addressRepository;
-const addressUseCase = useCases.addressUseCases(addressRepo);
-const addressController = controllers.addressController(addressUseCase);
+module.exports = (app, controller) => {
+    router.get("/", controller.index);
+    router.get("/:id", controller.show);
+    router.post("/", controller.store);
+    router.put("/:id", controller.update);
+    router.delete("/:id", controller.destroy);
 
-router.use(middlewares.auth);
-
-router.get("/", addressController.index);
-router.get("/:id", addressController.show);
-router.post("/", addressController.store);
-router.put("/:id", addressController.update);
-router.delete("/:id", addressController.destroy);
-
-module.exports = (app) => {
-    app.use('/addresss', router);
+    app.use('/addresses', router);
 };

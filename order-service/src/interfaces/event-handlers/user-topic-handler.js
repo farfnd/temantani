@@ -41,7 +41,7 @@ async function handleNewUser(message) {
 
 async function handleNewAdmin(message) {
     try {
-        const adminRepo = repositories.adminRepository();
+        const adminRepo = new repositories.AdminRepository();
         const adminUseCase = useCases.adminUseCases(adminRepo);
         const admin = await adminUseCase.createAdmin(message);
         if (!admin) {
@@ -55,7 +55,7 @@ async function handleNewAdmin(message) {
 
 async function handleNewUser(message) {
     try {
-        const userRepo = repositories.userRepository;
+        const userRepo = new repositories.UserRepository();
         const userUseCase = useCases.userUseCases(userRepo);
         const user = await userUseCase.create({
             id: message.userId,

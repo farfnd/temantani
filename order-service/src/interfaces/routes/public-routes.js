@@ -1,13 +1,9 @@
-const { express, controllers, repositories, useCases, middlewares } = require('./abstracts/common.js');
+const { Router } = require('express');
 
-const router = express.Router();
+const router = Router();
 
-const orderRepo = repositories.orderRepository;
-const orderUseCase = useCases.orderUseCases(orderRepo);
-const orderController = controllers.orderController(orderUseCase);
+module.exports = (app, controllers) => {
+    router.post("/orders/payment", controllers.orderController.storePayment);
 
-router.post("/orders/payment", orderController.storePayment);
-
-module.exports = (app) => {
-    app.use('/', router);
+    app.use("/", router);
 };
