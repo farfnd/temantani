@@ -3,28 +3,28 @@ class BaseRepository {
         this.model = model;
     }
 
-    getAll() {
-        return this.model.findAll();
+    getAll(options = {}) {
+        return this.model.findAll(options);
     }
 
-    getById(id) {
-        return this.model.findOne({ where: { id } });
+    getById(id, options = {}) {
+        return this.model.findOne({ where: { id }, ...options });
     }
 
-    find(query) {
-        return this.model.findAll({ where: query });
+    find(query, options = {}) {
+        return this.model.findAll({ where: query, ...options });
     }
 
-    create(data) {
-        return this.model.create(data);
+    create(data, options = {}) {
+        return this.model.create(data, options);
     }
 
-    update(id, data) {
-        return this.model.update(data, { where: { id } });
+    update(id, data, options = {}) {
+        return this.model.update(data, { where: { id }, ...options });
     }
 
-    delete(id) {
-        return this.model.destroy({ where: { id } });
+    delete(id, options = {}) {
+        return this.model.destroy({ where: { id }, ...options });
     }
 }
 
