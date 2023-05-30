@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Projects',
         key: 'id'
       },
-      validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
+      validate: { notNull: true, notEmpty: true, isUUID: 4 }
     },
     workerId: {
       type: DataTypes.UUID,
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Workers',
         key: 'id'
       },
-      validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
+      validate: { notNull: true, notEmpty: true, isUUID: 4 }
     },
     status: {
       type: DataTypes.ENUM(Object.values(AcceptableStatus)),
@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Admins',
         key: 'id'
       },
-      validate: { notNull: true, notEmpty: true, isInt: true, min: 1 }
+      validate: { notNull: true, notEmpty: true, isUUID: 4 }
     },
   }, {
     sequelize,
