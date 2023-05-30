@@ -3,6 +3,7 @@ const errors = require('../../support/errors');
 const { WorkOffer, Project, Admin, Worker } = require('../models');
 const ProjectStatus = require('../enums/ProjectStatus');
 const AcceptableStatus = require('../enums/AcceptableStatus');
+
 class WorkOfferRepository extends BaseRepository {
     constructor() {
         super(WorkOffer);

@@ -46,7 +46,7 @@ module.exports = {
       },
       verifierId: {
         type: Sequelize.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Admins',
           key: 'id'

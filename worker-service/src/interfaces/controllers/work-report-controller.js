@@ -1,8 +1,16 @@
+const { createRules, updateRules, validate } = require('../../application/validators/work-report-validator.js');
+const errors = require('../../support/errors');
+
 module.exports = (usecase) => {
     const controller = {
-        index: async (_, res) => {
+        index: async (req, res) => {
             try {
-                const data = await usecase.getAll()
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getAll();
+                } else {
+                    data = await usecase.find({ workerId: req.user.id });
+                }
                 res.send(data);
             } catch (error) {
                 res.statusCode = 500;
@@ -12,7 +20,15 @@ module.exports = (usecase) => {
 
         show: async (req, res) => {
             try {
-                const data = await usecase.getById(req.params.id);
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getById(req.params.id);
+                } else {
+                    data = await usecase.findOne({ 
+                        id: req.params.id,
+                        workerId: req.user.id
+                    });
+                }
                 res.send(data);
             } catch (error) {
                 res.statusCode = 500;
@@ -20,21 +36,28 @@ module.exports = (usecase) => {
             }
         },
 
-        store: async (req, res) => {
-            try {
-                const body = {
-                    name: req.body.name,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                };
-                await usecase.create(body);
-                res.status(200).json({
-                    message: "success",
-                });
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        },
+        store: [
+            createRules,
+            validate,
+            async (req, res) => {
+                try {
+                    const body = {
+                        projectId: req.body.projectId,
+                        workerId: req.user.id,
+                        week: req.body.week,
+                        description: req.body.description,
+                        proof: req.body.proof,
+                    };
+                    
+                    await usecase.create(body);
+                    res.status(200).json({
+                        message: 'success',
+                    });
+                } catch (error) {
+                    res.status(error.status).json(error.message);
+                }
+            },
+        ],
 
         update: async (req, res) => {
             try {

@@ -15,6 +15,10 @@ class BaseRepository {
         return this.model.findAll({ where: query, ...options });
     }
 
+    findOne(query, options = {}) {
+        return this.model.findOne({ where: query, ...options });
+    }
+
     create(data, options = {}) {
         return this.model.create(data, options);
     }

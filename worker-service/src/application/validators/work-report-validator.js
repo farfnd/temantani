@@ -3,11 +3,10 @@ const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
 
 const createRules = [
   body('projectId').notEmpty().isUUID(),
-  body('workerId').notEmpty().isUUID(),
-  body('status').notEmpty().isIn(Object.values(AcceptableStatus)),
-  body('week').notEmpty().isInt({ min: 1, max: 52 }),
+  body('workerId').not().exists(),
+  body('week').notEmpty().isInt({ min: 1 }),
   body('description').notEmpty().isString(),
-  body('proof').notEmpty().isString()
+  body('proof').optional().isString()
 ];
 
 const updateRules = [
@@ -15,7 +14,7 @@ const updateRules = [
   body('projectId').not().exists().withMessage('Project ID cannot be updated'),
   body('workerId').not().exists().withMessage('Worker ID cannot be updated'),
   body('status').notEmpty().isIn(Object.values(AcceptableStatus)),
-  body('week').notEmpty().isInt({ min: 1, max: 52 }),
+  body('week').notEmpty().isInt({ min: 1 }),
   body('description').notEmpty().isString(),
   body('proof').notEmpty().isString()
 ];

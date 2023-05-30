@@ -1,4 +1,5 @@
 const BaseRepository = require('./abstracts/base-repository');
+const errors = require('../../support/errors');
 const { WorkReport, Project, Worker, WorkOffer } = require('../models');
 const ProjectStatus = require('../enums/ProjectStatus');
 const AcceptableStatus = require('../enums/AcceptableStatus');
@@ -51,7 +52,13 @@ class WorkReportRepository extends BaseRepository {
             throw errors.BadRequest("Work report already exists for the week");
         }
         
-        return super.create(data, options);
+        try {
+            return await super.create(data, options);
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 
     async update(id, data, options = {}) {

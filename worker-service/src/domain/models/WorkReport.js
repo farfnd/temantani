@@ -38,9 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.ENUM(Object.values(AcceptableStatus)),
-      allowNull: false,
+      allowNull: true,
       defaultValue: AcceptableStatus.PENDING,
-      validate: { notNull: true, notEmpty: true, isIn: [Object.values(AcceptableStatus)] }
     },
     week: {
       type: DataTypes.INTEGER,
@@ -56,12 +55,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     verifierId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'Admins',
         key: 'id'
       },
-      validate: { notNull: true, notEmpty: true, isUUID: 4 }
+      validate: { isUUID: 4 }
     },
   }, {
     sequelize,
