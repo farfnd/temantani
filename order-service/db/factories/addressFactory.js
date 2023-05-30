@@ -1,6 +1,6 @@
 const { fakerID_ID: faker } = require('@faker-js/faker');
 const Sequelize = require('sequelize');
-const { User } = require('../../src/domain/models'); // Replace with your actual User model
+const { User } = require('../../src/domain/models');
 
 const generate = () => {
     return {
