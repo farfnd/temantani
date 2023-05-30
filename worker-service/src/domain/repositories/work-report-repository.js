@@ -1,5 +1,6 @@
-const { WorkReport } = require('../models');
 const BaseRepository = require('./abstracts/base-repository');
+const { WorkReport } = require('../models');
+const ProjectStatus = require('../enums/ProjectStatus');
 
 class WorkReportRepository extends BaseRepository {
     constructor() {
@@ -13,6 +14,9 @@ class WorkReportRepository extends BaseRepository {
         const project = await Project.findByPk(projectId);
         if (!project) {
             throw errors.BadRequest("Project does not exist");
+        }
+        if (project.status !== ProjectStatus.ONGOING) {
+            throw errors.BadRequest("Project is not ongoing");
         }
 
         // Check if the worker exists

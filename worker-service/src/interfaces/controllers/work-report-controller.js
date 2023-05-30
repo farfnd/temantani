@@ -1,5 +1,3 @@
-const { hashPassword } = require('../../support/helpers.js');
-
 module.exports = (usecase) => {
     const controller = {
         index: async (_, res) => {
@@ -40,9 +38,6 @@ module.exports = (usecase) => {
 
         update: async (req, res) => {
             try {
-                if (req.body.password) {
-                    req.body.password = hashPassword(req.body.password);
-                }
                 await usecase.update(req.params.id, req.body);
                 res.status(200).json({
                     message: "success",

@@ -4,7 +4,7 @@ const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
 const createRules = [
   body('projectId').notEmpty().isUUID(),
   body('workerId').notEmpty().isUUID(),
-  body('adminId').notEmpty().isUUID(),
+  body('adminId').optional().isUUID(),
   body('status').notEmpty().isIn(Object.values(AcceptableStatus)),
   body('workContractUrl').optional().isString(),
 ];

@@ -1,4 +1,3 @@
-const { hashPassword } = require('../../support/helpers.js');
 const { createRules, updateRules, validate } = require('../../application/validators/work-offer-validator.js');
 
 module.exports = (usecase) => {
@@ -29,9 +28,9 @@ module.exports = (usecase) => {
             async (req, res) => {
                 try {
                     const body = {
+                        adminId: req.user.id,
                         projectId: req.body.projectId,
                         workerId: req.body.workerId,
-                        adminId: req.body.adminId,
                         status: req.body.status,
                         workContractUrl: req.body.workContractUrl,
                     };
@@ -40,7 +39,7 @@ module.exports = (usecase) => {
                         message: 'success',
                     });
                 } catch (error) {
-                    res.status(500).json(error);
+                    res.status(error.status).json(error.message);
                 }
             },
         ],
@@ -50,9 +49,6 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    if (req.body.password) {
-                        req.body.password = hashPassword(req.body.password);
-                    }
                     await usecase.update(req.params.id, req.body);
                     res.status(200).json({
                         message: "success",
