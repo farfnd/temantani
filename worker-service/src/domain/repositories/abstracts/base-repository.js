@@ -8,7 +8,7 @@ class BaseRepository {
     }
 
     getById(id, options = {}) {
-        return this.model.findOne({ where: { id }, ...options });
+        return this.model.findByPk(id, options);
     }
 
     find(query, options = {}) {

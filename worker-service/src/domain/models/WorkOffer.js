@@ -51,10 +51,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: AcceptableStatus.PENDING,
       validate: { notNull: true, notEmpty: true, isIn: [Object.values(AcceptableStatus)] }
     },
-    workContractUrl: {
-      type: DataTypes.STRING,
+    workContractAccepted: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
-      validate: { notNull: false, notEmpty: true, isUrl: true }
+      defaultValue: false,
+      validate: { notNull: false, notEmpty: true, isBoolean: true }
     },
   }, {
     sequelize,

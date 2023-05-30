@@ -9,7 +9,6 @@ module.exports = function (req, res, next) {
         req.user = decoded;
 
         // Check if the user has an admin role
-        console.log(decoded);
         const isWorker = decoded.roles.some(role => role === UserRoles.WORKER);
 
         if (isWorker) {

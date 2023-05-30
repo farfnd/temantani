@@ -22,7 +22,7 @@ module.exports = (usecase) => {
             }
         },
 
-        getCurrentFarmer: async (req, res) => {
+        getCurrentWorker: async (req, res) => {
             try {
                 const data = await usecase.getById(req.user.id);
                 res.send(data);

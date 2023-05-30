@@ -30,6 +30,9 @@ async function handleNewUser(message) {
     }
 
     delete message.roles;
+    
+    message.id = message.userId;
+    delete message.userId;
 
     if (hasWorkerRole) {
         await handleNewWorker(message);

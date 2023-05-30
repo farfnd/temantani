@@ -1,10 +1,16 @@
 const { createRules, updateRules, validate } = require('../../application/validators/work-offer-validator.js');
+const errors = require('../../support/errors');
 
 module.exports = (usecase) => {
     const controller = {
-        index: async (_, res) => {
+        index: async (req, res) => {
             try {
-                const data = await usecase.getAll()
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getAll();
+                } else {
+                    data = await usecase.find({ workerId: req.user.id });
+                }
                 res.send(data);
             } catch (error) {
                 res.statusCode = 500;
@@ -14,7 +20,15 @@ module.exports = (usecase) => {
 
         show: async (req, res) => {
             try {
-                const data = await usecase.getById(req.params.id);
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getById(req.params.id);
+                } else {
+                    data = await usecase.find({ 
+                        id: req.params.id,
+                        workerId: req.user.id
+                    });
+                }
                 res.send(data);
             } catch (error) {
                 res.statusCode = 500;
@@ -27,13 +41,18 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
+                    if(req.body.adminId && req.body.adminId !== req.user.id) {
+                        throw errors.BadRequest("Admin ID does not match with the logged in user");
+                    }
+
                     const body = {
                         adminId: req.user.id,
                         projectId: req.body.projectId,
                         workerId: req.body.workerId,
                         status: req.body.status,
-                        workContractUrl: req.body.workContractUrl,
+                        workContractAccepted: req.body.workContractAccepted,
                     };
+                    
                     await usecase.create(body);
                     res.status(200).json({
                         message: 'success',
@@ -54,7 +73,7 @@ module.exports = (usecase) => {
                         message: "success",
                     });
                 } catch (error) {
-                    res.status(500).json(error);
+                    res.status(error.status).json(error.message);
                 }
             },
         ],

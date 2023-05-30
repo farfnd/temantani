@@ -4,18 +4,20 @@ const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
 const createRules = [
   body('projectId').notEmpty().isUUID(),
   body('workerId').notEmpty().isUUID(),
-  body('adminId').optional().isUUID(),
   body('status').notEmpty().isIn(Object.values(AcceptableStatus)),
-  body('workContractAccepted').optional().isBoolean(),
+  body('week').notEmpty().isInt({ min: 1, max: 52 }),
+  body('description').notEmpty().isString(),
+  body('proof').notEmpty().isString()
 ];
 
 const updateRules = [
   param('id').notEmpty().isUUID(),
   body('projectId').not().exists().withMessage('Project ID cannot be updated'),
   body('workerId').not().exists().withMessage('Worker ID cannot be updated'),
-  body('adminId').not().exists().withMessage('Admin ID cannot be updated'),
-  body('status').optional().isIn(Object.values(AcceptableStatus)),
-  body('workContractAccepted').optional().isBoolean(),
+  body('status').notEmpty().isIn(Object.values(AcceptableStatus)),
+  body('week').notEmpty().isInt({ min: 1, max: 52 }),
+  body('description').notEmpty().isString(),
+  body('proof').notEmpty().isString()
 ];
 
 const validate = (req, res, next) => {
