@@ -1,11 +1,8 @@
 const { fakerID_ID: faker } = require('@faker-js/faker');
-const WorkAvailability = require('../../src/domain/enums/WorkAvailability');
 
 const generate = () => {
     return {
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-        workAvailability: WorkAvailability.AVAILABLE,
+        address: faker.location.streetAddress(),
     };
 };
 

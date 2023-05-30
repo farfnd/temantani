@@ -1,9 +1,9 @@
 'use strict';
-const { create } = require('../factories/workerFactory');
+const { create } = require('../factories/projectFactory');
 
 /** @type {import('sequelize-cli').Migration} */
 
-const table = 'Workers';
+const table = 'Projects';
 
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -15,3 +15,4 @@ module.exports = {
     await queryInterface.bulkDelete(table, null, {});
   }
 };
+

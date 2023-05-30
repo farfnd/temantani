@@ -1,9 +1,9 @@
 'use strict';
-const { create } = require('../factories/workerFactory');
+const { create } = require('../factories/landFactory');
 
 /** @type {import('sequelize-cli').Migration} */
 
-const table = 'Workers';
+const table = 'Lands';
 
 module.exports = {
   async up (queryInterface, Sequelize) {

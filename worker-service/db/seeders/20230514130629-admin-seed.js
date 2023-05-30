@@ -2,13 +2,16 @@
 const { create } = require('../factories/adminFactory');
 
 /** @type {import('sequelize-cli').Migration} */
+
+const table = 'Admins';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const admins = await create(5);
-    await queryInterface.bulkInsert('Admins', admins);
+    const data = await create(5);
+    await queryInterface.bulkInsert(table, data);
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Admins', null, {});
+    await queryInterface.bulkDelete(table, null, {});
   }
 };
