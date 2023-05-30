@@ -59,16 +59,32 @@ module.exports = (usecase) => {
             },
         ],
 
-        update: async (req, res) => {
-            try {
-                await usecase.update(req.params.id, req.body);
-                res.status(200).json({
-                    message: "success",
-                });
-            } catch (error) {
-                res.status(500).json(error);
-            }
-        },
+        update: [
+            updateRules,
+            validate,
+            async (req, res) => {
+                try {
+                    let body;
+                    if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                        body = {
+                            status: req.body.status,
+                        };
+                    } else {
+                        body = {
+                            description: req.body.description,
+                            proof: req.body.proof,
+                        };
+                    }
+                    
+                    await usecase.update(req.params.id, body);
+                    res.status(200).json({
+                        message: 'success',
+                    });
+                } catch (error) {
+                    res.status(error.status).json(error.message);
+                }
+            },
+        ],
 
         destroy: async (req, res) => {
             try {
