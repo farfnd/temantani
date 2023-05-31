@@ -7,7 +7,6 @@ class KafkaConsumer {
         this.kafka = new Kafka(bootstrapServer);
         this.topicToHandlerMap = {
             'user-topic': handlers.userTopicHandler,
-            // 'land-registered-topic': handlers.landTopicHandler,
             'project-topic': handlers.projectTopicHandler,
         };
     }
