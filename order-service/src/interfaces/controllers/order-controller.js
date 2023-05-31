@@ -106,9 +106,11 @@ module.exports = (usecase) => {
                 })
             }
 
-            const serverKey = config.midtransServerKey;
+            const serverKey = config.midtrans.serverKey;
             const check = order_id + status_code + gross_amount + serverKey;
             if (verifySHA512(signature_key, check)) {
+                const t = await sequelize.transaction();
+
                 try {
                     await usecase.paymentPaid(
                         order_id,
@@ -116,10 +118,12 @@ module.exports = (usecase) => {
                         parseInt(gross_amount),
                         payment_type
                     );
+                    await t.commit();
                     return res.status(200).json({
                         message: "Payment status updated"
                     })
                 } catch (error) {
+                    console.log('error:',error);
                     return res.status(error.status).json(error.message)
                 }
             } else {

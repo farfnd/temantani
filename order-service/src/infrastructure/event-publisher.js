@@ -4,12 +4,13 @@ class EventPublisher {
         this.topicMapping = {
             UserRegistered: 'user-topic',
             OrderCreated: 'order-topic',
+            OrderPaid: 'order-topic',
+            OrderCancelled: 'order-topic',
         };
     }
 
     async publish(event) {
         console.log("Publishing event to Kafka");
-        console.log(event);
         const message = JSON.stringify(event);
 
         try {
