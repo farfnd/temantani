@@ -60,6 +60,7 @@ module.exports = (usecase) => {
                     });
                 } catch (error) {
                     await t.rollback();
+                    console.log('error:',error);
                     throw error;
                 }
             } catch (error) {

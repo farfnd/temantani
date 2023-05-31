@@ -1,7 +1,9 @@
-const { Order, Address, User } = require('../models');
+const { Order, Address, User, Product } = require('../models');
 const BaseRepository = require('./abstracts/base-repository');
 const OrderCreated = require('../events/order-created');
 const OrderEventType = require("../enums/OrderEventType");
+const ProductStatus = require("../enums/ProductStatus");
+const errors = require('../../support/errors');
 
 class OrderRepository extends BaseRepository {
     constructor(eventPublisher) {
@@ -10,17 +12,24 @@ class OrderRepository extends BaseRepository {
     }    
 
     async create(data, options = {}) {
-        const { addressId, userId } = data;
-
-        const address = await Address.findByPk(addressId);
-        const user = await User.findByPk(userId);
+        const { addressId, userId, productId } = data;
         
+        const user = await User.findByPk(userId);
         if (!user) {
-            throw new Error('User not found');
+            throw errors.BadRequest('User not found');
+        }
+        
+        const address = await Address.findByPk(addressId);
+        if (!address) {
+            throw errors.BadRequest('Address not found');
         }
 
-        if (!address) {
-            throw new Error('Address not found');
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            throw errors.BadRequest('Product not found');
+        }
+        if(product.status === ProductStatus.NA) {
+            throw errors.BadRequest('Product not available for sale');
         }
         
         const createdOrder = await super.create(data, options);
