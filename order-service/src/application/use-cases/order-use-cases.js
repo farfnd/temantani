@@ -28,8 +28,7 @@ class OrderUseCase extends AbstractUseCase {
                 paymentAmount: grossAmount
             });
         } catch (error) {
-            console.log(error);
-            throw errors.InternalServerError('Error updating order status');
+            throw error;
         }
     }
 }
