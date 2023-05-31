@@ -1,7 +1,9 @@
 const { Order, Address, User, Product } = require('../models');
 const BaseRepository = require('./abstracts/base-repository');
 const OrderCreated = require('../events/order-created');
-const OrderEventType = require("../enums/OrderEventType");
+const OrderPaid = require('../events/order-paid');
+const OrderCancelled = require('../events/order-cancelled');
+const OrderStatus = require("../enums/OrderStatus");
 const ProductStatus = require("../enums/ProductStatus");
 const errors = require('../../support/errors');
 
@@ -32,6 +34,8 @@ class OrderRepository extends BaseRepository {
             throw errors.BadRequest('Product not available for sale');
         }
         
+        await product.update({ stock: product.stock - data.amount });
+
         const createdOrder = await super.create(data, options);
 
         let order;
@@ -41,9 +45,35 @@ class OrderRepository extends BaseRepository {
             throw error;
         }
         
-        // Publish the order created event
-        const orderCreatedEvent = new OrderCreated(OrderEventType.ORDER_CREATED, order);
-        this.eventPublisher.publish(orderCreatedEvent);
+        if (this.eventPublisher) {
+            const orderCreatedEvent = new OrderCreated(order);
+            this.eventPublisher.publish(orderCreatedEvent);
+        }
+
+        return order;
+    }
+
+    async update(id, data, options = {}) {
+        await super.update(id, data, options);
+        const status = data.status;
+
+        let order;
+        try {
+            order = await Order.findByPk(id);
+        } catch (error) {
+            throw error;
+        }
+        
+        let orderEvent;
+        if (status === OrderStatus.PAID) {
+            orderEvent = new OrderPaid(order);
+        } else if (status === OrderStatus.CANCELLED) {
+            orderEvent = new OrderCancelled(order);
+        }
+
+        if (orderEvent && this.eventPublisher) {
+            this.eventPublisher.publish(orderEvent);
+        }
 
         return order;
     }

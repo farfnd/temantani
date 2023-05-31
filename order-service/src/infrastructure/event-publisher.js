@@ -9,6 +9,7 @@ class EventPublisher {
 
     async publish(event) {
         console.log("Publishing event to Kafka");
+        console.log(event);
         const message = JSON.stringify(event);
 
         try {

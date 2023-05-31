@@ -1,10 +1,10 @@
 const OrderEventType = require('../enums/OrderEventType');
 
-class OrderCreated {
+class OrderCancelled {
     constructor(order) {
-        this.type = OrderEventType.ORDER_CREATED;
+        this.type = OrderEventType.ORDER_CANCELLED;
         this.order = order;
     }
 }
 
-module.exports = OrderCreated;
+module.exports = OrderCancelled;
