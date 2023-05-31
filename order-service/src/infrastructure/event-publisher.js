@@ -2,7 +2,6 @@ class EventPublisher {
     constructor(kafkaService) {
         this.kafkaService = kafkaService;
         this.topicMapping = {
-            UserRegistered: 'user-topic',
             OrderCreated: 'order-topic',
             OrderPaid: 'order-topic',
             OrderCancelled: 'order-topic',
