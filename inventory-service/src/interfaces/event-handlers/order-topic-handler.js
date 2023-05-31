@@ -1,6 +1,7 @@
 const useCases = require("../../application/use-cases");
 const repositories = require("../../domain/repositories");
 const OrderEventType = require('../../domain/enums/OrderEventType');
+const ProductStatus = require('../../domain/enums/ProductStatus');
 
 const repository = new repositories.ProductRepository();
 const usecase = useCases.productUseCases(repository);
@@ -25,7 +26,14 @@ async function handleNewOrder(message) {
     try {
         const product = await usecase.getById(message.order.productId);
         product.stock = product.stock - message.order.amount;
-        await usecase.update(product.id, { stock: product.stock });
+        if(product.stock <= 0) {
+            product.status = ProductStatus.PREORDER;
+        }
+
+        await usecase.update(product.id, {
+            stock: product.stock,
+            status: product.status
+        });
 
         console.log('Product stock updated');
     } catch (error) {
@@ -37,7 +45,13 @@ async function handleCancelledOrder(message) {
     try {
         const product = await usecase.getById(message.order.productId);
         product.stock = product.stock + message.order.amount;
-        await usecase.update(product.id, { stock: product.stock });
+        if(product.stock > 0) {
+            product.status = ProductStatus.AVAILABLE;
+        }
+        await usecase.update(product.id, { 
+            stock: product.stock,
+            status: product.status
+        });
 
         console.log('Product stock updated');
     } catch (error) {

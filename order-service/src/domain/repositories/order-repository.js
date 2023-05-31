@@ -32,8 +32,12 @@ class OrderRepository extends BaseRepository {
         if(product.status === ProductStatus.NA) {
             throw errors.BadRequest('Product not available for sale');
         }
+        const newStock = product.stock - data.amount;
+        if(newStock < 0) {
+            throw errors.BadRequest('Product stock is not enough');
+        }
         
-        await product.update({ stock: product.stock - data.amount });
+        await product.update({ stock: newStock });
 
         const createdOrder = await super.create(data, options);
 
