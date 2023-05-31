@@ -1,5 +1,5 @@
 const express = require('express');
-const middlewares = require('../../../application/middleware');
+const middlewares = require('../../../application/middlewares');
 
 const repositories = require("../../../domain/repositories");
 const useCases = require("../../../application/use-cases");

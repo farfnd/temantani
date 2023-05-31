@@ -1,25 +1,23 @@
-const { express, controllers, repositories, useCases, middlewares } = require('./abstracts/common.js');
+const { Router } = require('express');
+const middlewares = require('../../application/middlewares');
 
-const router = express.Router();
+const router = Router();
 
-const productRepo = repositories.productRepository;
-const productUseCase = useCases.productUseCases(productRepo);
-const productController = controllers.productController(productUseCase);
+module.exports = (app, controller) => {
+    router.get("/", controller.index);
+    router.get("/:id", controller.show);
+    
+    router.use((req, res, next) => {
+        if (req.method !== 'GET') {
+            middlewares.admin(req, res, next);
+        } else {
+            next();
+        }
+    });
 
-router.use((req, res, next) => {
-    if (req.method !== 'GET') {
-        middlewares.admin(req, res, next);
-    } else {
-        next();
-    }
-});
+    router.post("/", controller.store);
+    router.put("/:id", controller.update);
+    router.delete("/:id", controller.destroy);
 
-router.get("/", productController.index);
-router.get("/:id", productController.show);
-router.post("/", productController.store);
-router.put("/:id", productController.update);
-router.delete("/:id", productController.destroy);
-
-module.exports = (app) => {
     app.use('/products', router);
 };
