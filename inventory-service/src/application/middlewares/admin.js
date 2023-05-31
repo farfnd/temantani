@@ -1,5 +1,5 @@
 const { toLower } = require("lodash");
-const { verifyJwt } = require("../../utils.js");
+const { verifyJwt } = require("../../support/helpers");
 
 module.exports = function (req, res, next) {
     try {
