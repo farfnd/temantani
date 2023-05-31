@@ -9,12 +9,17 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      
+      invoiceNumber: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       orderId: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID,
+        allowNull: false
       },
       transactionId: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID,
+        allowNull: false
       },
       paymentMethod: {
         type: Sequelize.STRING
@@ -31,16 +36,26 @@ module.exports = {
       customerDetails: {
         type: Sequelize.JSON
       },
-      
       createdAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        allowNull: true,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
-        allowNull: true,
         type: Sequelize.DATE,
+        allowNull: true,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
+      }
+    }, {
+      uniqueKeys: {
+          actions_unique: {
+              fields: ['invoiceNumber', 'orderId', 'transactionId']
+          }
       }
     });
   },

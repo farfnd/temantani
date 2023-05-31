@@ -15,9 +15,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Invoice.init({
     orderId: {
-      type: DataTypes.STRING
+      type: DataTypes.UUID
     },
     transactionId: {
+      type: DataTypes.UUID
+    },
+    invoiceNumber: {
       type: DataTypes.STRING
     },
     paymentMethod: {
@@ -38,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Invoice',
+    paranoid: true,
   });
   return Invoice;
 };

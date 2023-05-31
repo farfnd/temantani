@@ -4,20 +4,20 @@ const app = express();
 const cors = require('cors');
 const routes = require('./interfaces/routes');
 const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
+const config = require('./support/config');
 
 require('dotenv').config();
-const port = process.env.PORT || 4000;
-const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
-
+const port = config.port;
+const kafkaBootstrapServer = config.kafkaBootstrapServer;
 const kafkaConsumer = new KafkaConsumer(kafkaBootstrapServer);
 
 app.use(cors());
 app.use(json());
 app.get('/', (req, res) => {
-    res.send('Welcome to Inventory Service');
+    res.send('Welcome to Order Service');
 });
 
-routes(app, kafkaProducer);
+routes(app);
 
 kafkaConsumer.start();
 

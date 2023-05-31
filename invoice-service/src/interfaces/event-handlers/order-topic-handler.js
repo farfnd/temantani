@@ -1,6 +1,7 @@
 const useCases = require("../../application/use-cases");
 const repositories = require("../../domain/repositories");
 const OrderEventType = require('../../domain/enums/OrderEventType');
+const { generateInvoiceId } = require('../../support/helpers');
 
 // Create instances of the repositories and use cases
 const invoiceRepo = new repositories.InvoiceRepository();
@@ -9,13 +10,10 @@ const invoiceUseCase = useCases.invoiceUseCases(invoiceRepo);
 async function handle(message) {
     const type = message.type;
     delete message.type;
+    const order = message.order;
     switch (type) {
         case OrderEventType.ORDER_PAID:
-            await createOrderInvoice(message);
-            break;
-
-        case OrderEventType.ORDER_CANCELLED:
-            await cancelOrderInvoice(message);
+            await createOrderInvoice(order);
             break;
 
         default:
@@ -23,25 +21,18 @@ async function handle(message) {
     }
 }
 
-async function createOrderInvoice(message) {
+async function createOrderInvoice(order) {
     try {
-        const invoice = await invoiceUseCase.create(message);
+        order.invoiceNumber = generateInvoiceId();
+        console.log('Creating invoice from message:', order);
+
+        const invoice = await invoiceUseCase.create(order);
         if (!invoice) {
             return;
         }
         console.log('New invoice created');
     } catch (error) {
         console.error('Error creating invoice from message:', error);
-    }
-}
-
-async function cancelOrderInvoice(message) {
-    try {
-        message = validateMessage(message);
-        const invoice = await invoiceUseCase.delete(message);
-        console.log('Invoice cancelled');
-    } catch (error) {
-        console.error('Error cancelling invoice from message:', error); 
     }
 }
 
