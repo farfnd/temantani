@@ -22,9 +22,10 @@ module.exports = (usecase) => {
 
         store: async (req, res) => {
             try {
-                await usecase.create(req.body)
+                const data = await usecase.create(req.body)
                 res.status(200).json({
-                    message: "success"
+                    data,
+                    message: "Product created"
                 })
             } catch (error) {
                 res.status(500).json(error)
@@ -34,8 +35,10 @@ module.exports = (usecase) => {
         update: async (req, res) => {
             try {
                 await usecase.update(req.params.id, req.body)
+                const data = await usecase.getById(req.params.id)
                 res.status(200).json({
-                    message: "success"
+                    data,
+                    message: "Product updated"
                 })
             } catch (error) {
                 res.status(500).json(error)
@@ -44,9 +47,11 @@ module.exports = (usecase) => {
 
         destroy: async (req, res) => {
             try {
+                const data = await usecase.getById(req.params.id)
                 await usecase.delete(req.params.id)
                 res.status(200).json({
-                    message: "success"
+                    data,
+                    message: "Product deleted"
                 })
             } catch (error) {
                 res.status(500).json(error)
