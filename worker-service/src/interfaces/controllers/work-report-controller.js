@@ -49,9 +49,10 @@ module.exports = (usecase) => {
                         proof: req.body.proof,
                     };
                     
-                    await usecase.create(body);
+                    const data = await usecase.create(body);
                     res.status(200).json({
-                        message: 'success',
+                        data,
+                        message: 'Work report created',
                     });
                 } catch (error) {
                     res.status(error.status).json(error.message);
@@ -76,9 +77,11 @@ module.exports = (usecase) => {
                         };
                     }
                     
-                    await usecase.update(req.params.id, body);
+                    await usecase.update(req.params.id, req.body)
+                    const data = await usecase.getById(req.params.id)
                     res.status(200).json({
-                        message: 'success',
+                        data,
+                        message: 'Work report updated',
                     });
                 } catch (error) {
                     res.status(error.status).json(error.message);
@@ -88,9 +91,11 @@ module.exports = (usecase) => {
 
         destroy: async (req, res) => {
             try {
-                await usecase.delete(req.params.id);
+                const data = await usecase.getById(req.params.id)
+                await usecase.delete(req.params.id)
                 res.status(200).json({
-                    message: "success",
+                    data,
+                    message: 'Work report deleted',
                 });
             } catch (error) {
                 res.status(500).json(error);

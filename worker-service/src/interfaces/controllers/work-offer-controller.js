@@ -53,9 +53,10 @@ module.exports = (usecase) => {
                         workContractAccepted: req.body.workContractAccepted,
                     };
                     
-                    await usecase.create(body);
+                    const data = await usecase.create(body);
                     res.status(200).json({
-                        message: 'success',
+                        data,
+                        message: 'Work offer created',
                     });
                 } catch (error) {
                     res.status(error.status).json(error.message);
@@ -68,9 +69,11 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    await usecase.update(req.params.id, req.body);
+                    await usecase.update(req.params.id, req.body)
+                    const data = await usecase.getById(req.params.id)
                     res.status(200).json({
-                        message: "success",
+                        data,
+                        message: "Work offer updated",
                     });
                 } catch (error) {
                     res.status(error.status).json(error.message);
@@ -80,9 +83,11 @@ module.exports = (usecase) => {
 
         destroy: async (req, res) => {
             try {
-                await usecase.delete(req.params.id);
+                const data = await usecase.getById(req.params.id)
+                await usecase.delete(req.params.id)
                 res.status(200).json({
-                    message: "success",
+                    data,
+                    message: "Work offer deleted",
                 });
             } catch (error) {
                 res.status(500).json(error);
