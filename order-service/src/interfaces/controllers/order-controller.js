@@ -55,7 +55,8 @@ module.exports = (usecase) => {
                     await t.commit();
 
                     res.status(200).json({
-                        message: "success",
+                        data: createdOrder,
+                        message: "Order created",
                         ...transactionData
                     });
                 } catch (error) {
@@ -71,7 +72,9 @@ module.exports = (usecase) => {
         update: async (req, res) => {
             try {
                 await usecase.update(req.params.id, req.body)
+                const data = await usecase.getById(req.params.id)
                 res.status(200).json({
+                    data,
                     message: "success"
                 })
             } catch (error) {
@@ -81,8 +84,10 @@ module.exports = (usecase) => {
 
         destroy: async (req, res) => {
             try {
+                const data = await usecase.getById(req.params.id)
                 await usecase.delete(req.params.id)
                 res.status(200).json({
+                    data,
                     message: "success"
                 })
             } catch (error) {
