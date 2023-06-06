@@ -11,6 +11,9 @@ module.exports = {
         allowNull: false,
         primaryKey: true
       },
+      landId: {
+        type: Sequelize.UUID,
+      },
       status: {
         type: Sequelize.ENUM(Object.values(ProjectStatus)),
         allowNull: false,

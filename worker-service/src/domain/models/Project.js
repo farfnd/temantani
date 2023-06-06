@@ -12,17 +12,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      //
+      Project.hasMany(models.WorkOffer, {
+        foreignKey: 'projectId',
+        as: 'workOffers'
+      });
+      Project.hasMany(models.WorkReport, {
+        foreignKey: 'projectId',
+        as: 'workReports'
+      });
     }
   }
   Project.init({
     landId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Lands',
-        key: 'id'
-      }
     },
     status: {
       type: DataTypes.ENUM(Object.values(ProjectStatus)),
@@ -36,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
   }, {
     sequelize,

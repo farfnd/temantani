@@ -1,7 +1,8 @@
 const { fakerID_ID: faker } = require('@faker-js/faker');
 const Sequelize = require('sequelize');
-const { Land } = require('../../src/domain/models');
 const ProjectStatus = require('../../src/domain/enums/ProjectStatus');
+const axios = require('axios');
+const config = require('../../src/support/config.js');
 
 const generate = () => {
     return {
@@ -21,12 +22,13 @@ const create = async (number = 1, attributes = {}) => {
         };
 
         if (!model.landId) {
-            const randomLand = await Land.findOne({
-                order: [
-                    Sequelize.fn('RANDOM'),
-                ]
-            });
-            model.landId = randomLand.id;
+            const response = await axios.get(`${config.api.landService}/lands`)
+            const data = response.data;
+
+            const randomIndex = Math.floor(Math.random() * data.length);
+            const randomId = data[randomIndex].id;
+
+            model.landId = randomId;
         }
 
         models.push(model);
