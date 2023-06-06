@@ -1,26 +1,41 @@
 const { hashPassword } = require('../../support/helpers.js');
+const errors = require('../../support/errors.js');
+const { getAllRules, getByIdRules, validate } = require('../../application/validators/worker-validator.js');
 
 module.exports = (usecase) => {
     const controller = {
-        index: async (_, res) => {
-            try {
-                const data = await usecase.getAll()
-                res.send(data);
-            } catch (error) {
-                res.statusCode = 500;
-                res.send(error);
+        index: [
+            getAllRules,
+            validate,
+            async (req, res) => {
+                try {
+                    console.log(req.query.filter)
+                    const data = await usecase.getAll({where: req.query.filter})
+                    res.send(data);
+                } catch (error) {
+                    res.statusCode = 500;
+                    console.log(error);
+                    res.send(error);
+                }
             }
-        },
+        ],
 
-        show: async (req, res) => {
-            try {
-                const data = await usecase.getById(req.params.id);
-                res.send(data);
-            } catch (error) {
-                res.statusCode = 500;
-                res.send(error);
+        show: [
+            getByIdRules,
+            validate,
+            async (req, res) => {
+                try {
+                    const data = await usecase.getById(
+                        req.params.id,
+                        { include: req.query.include }
+                    );
+                    res.send(data);
+                } catch (error) {
+                    res.statusCode = 500;
+                    res.send(error);
+                }
             }
-        },
+        ],
 
         getCurrentWorker: async (req, res) => {
             try {
@@ -29,22 +44,6 @@ module.exports = (usecase) => {
             } catch (error) {
                 res.statusCode = 500;
                 res.send(error);
-            }
-        },
-
-        store: async (req, res) => {
-            try {
-                const body = {
-                    name: req.body.name,
-                    email: req.body.email,
-                    phoneNumber: req.body.phoneNumber,
-                };
-                await usecase.create(body);
-                res.status(200).json({
-                    message: "success",
-                });
-            } catch (error) {
-                res.status(500).json(error);
             }
         },
 
