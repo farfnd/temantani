@@ -11,4 +11,8 @@ module.exports = {
             unit: 'minutes',
         }
     },
+    api: {
+        landService: process.env.LAND_SERVICE_URL || 'http://localhost:4000',
+        userService: process.env.USER_SERVICE_URL || 'http://localhost:4000',
+    },
 };
