@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const config = require('./config');
 
-const secret = "$2b$10$OstRst1LWEfDyKEGdKcOKO";
+const secret = config.jwtSecret;
 
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, secret);

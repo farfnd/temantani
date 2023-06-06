@@ -11,4 +11,5 @@ module.exports = {
             unit: 'minutes',
         }
     },
+    jwtSecret: process.env.JWT_SECRET,
 };
