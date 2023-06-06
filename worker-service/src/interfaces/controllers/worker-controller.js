@@ -10,7 +10,7 @@ module.exports = (usecase) => {
             async (req, res) => {
                 try {
                     console.log(req.query.filter)
-                    const data = await usecase.getAll({where: req.query.filter})
+                    const data = await usecase.getAll({ where: req.query.filter })
                     res.send(data);
                 } catch (error) {
                     res.statusCode = 500;
@@ -25,13 +25,17 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
+
+                    const include = req.query.include.split(',');
+
                     const data = await usecase.getById(
                         req.params.id,
-                        { include: req.query.include }
+                        { include }
                     );
                     res.send(data);
                 } catch (error) {
                     res.statusCode = 500;
+                    console.log(error);
                     res.send(error);
                 }
             }

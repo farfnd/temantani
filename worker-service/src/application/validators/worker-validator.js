@@ -16,8 +16,18 @@ const getByIdRules = [
 
   query('include')
     .optional()
-    .isIn(['workOffers', 'workReports', 'projects'])
-    .withMessage('Invalid include')
+    .custom(value => {
+      const includeValues = value.split(',');
+      const validValues = ['workOffers', 'workReports', 'projects'];
+
+      for (const includeValue of includeValues) {
+        if (!validValues.includes(includeValue)) {
+          throw new Error('Invalid include value');
+        }
+      }
+
+      return true;
+    })
 ];
 
 const validate = (req, res, next) => {
