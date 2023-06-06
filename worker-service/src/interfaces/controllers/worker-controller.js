@@ -25,8 +25,10 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-
-                    const include = req.query.include.split(',');
+                    let include = [];
+                    if (req.query.include) {
+                        include = req.query.include.split(',');
+                    }
 
                     const data = await usecase.getById(
                         req.params.id,
