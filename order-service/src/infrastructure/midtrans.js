@@ -1,6 +1,7 @@
 const config = require('../support/config');
 const midtransClient = require('midtrans-client');
 const moment = require('moment');
+const DistanceService = require('./distance');
 
 class MidtransService {
     createItemDetails(product, order) {
@@ -45,6 +46,21 @@ class MidtransService {
             const user = await order.getUser();
             const address = await order.getAddress();
 
+            // Calculate the distance
+            const distanceService = new DistanceService(address);
+            const distance = await distanceService.getDistance(); // in meter
+
+            // Calculate the shipping cost
+            const shippingCost = config.shippingCost.base
+                + config.shippingCost.perKmUnder10Km * Math.ceil(distance / 1000)
+                + (distance > 10000
+                    ? config.shippingCost.perKmAbove10Km * Math.ceil((distance - 10000) / 1000)
+                    : 0
+                );
+
+            // Update the order
+            order.shippingCost = shippingCost;
+            
             let snap = new midtransClient.Snap({
                 isProduction : config.env === 'production',
                 serverKey : config.midtrans.serverKey
