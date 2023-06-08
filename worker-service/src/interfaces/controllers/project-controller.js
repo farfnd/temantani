@@ -7,7 +7,6 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    console.log(req.query.filter)
                     const data = await usecase.getAll({ where: req.query.filter })
                     res.send(data);
                 } catch (error) {

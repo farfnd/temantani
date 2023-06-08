@@ -1,5 +1,13 @@
-const { body, param, validationResult } = require('express-validator');
+const { body, param, validationResult, query } = require('express-validator');
 const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
+
+const getAllRules = [
+  query('filter.projectId').optional().isUUID(),
+  query('filter.workerId').optional().isUUID(),
+  query('filter.adminId').not().exists(),
+  query('filter.status').optional().isIn(Object.values(AcceptableStatus)),
+  query('filter.workContractAccepted').optional().isBoolean(),
+];
 
 const createRules = [
   body('projectId').notEmpty().isUUID(),
@@ -27,6 +35,7 @@ const validate = (req, res, next) => {
 };
 
 module.exports = {
+  getAllRules,
   createRules,
   updateRules,
   validate,

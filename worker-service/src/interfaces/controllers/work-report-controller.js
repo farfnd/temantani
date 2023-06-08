@@ -1,22 +1,31 @@
-const { createRules, updateRules, validate } = require('../../application/validators/work-report-validator.js');
+const { getAllRules, createRules, updateRules, validate } = require('../../application/validators/work-report-validator.js');
 const errors = require('../../support/errors');
 
 module.exports = (usecase) => {
     const controller = {
-        index: async (req, res) => {
-            try {
-                let data;
-                if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                    data = await usecase.getAll();
-                } else {
-                    data = await usecase.find({ workerId: req.user.id });
+        index: [
+            getAllRules,
+            validate,
+            async (req, res) => {
+                try {
+                    let include = [];
+                    if (req.query.include) {
+                        include = req.query.include.split(',');
+                    }
+
+                    let data;
+                    if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                        data = await usecase.getAll({ where: req.query.filter, include })
+                    } else {
+                        data = await usecase.find({ workerId: req.user.id, ...req.query.filter }, include);
+                    }
+                    res.send(data);
+                } catch (error) {
+                    res.statusCode = 500;
+                    res.send(error);
                 }
-                res.send(data);
-            } catch (error) {
-                res.statusCode = 500;
-                res.send(error);
-            }
-        },
+            },
+        ],
 
         show: async (req, res) => {
             try {

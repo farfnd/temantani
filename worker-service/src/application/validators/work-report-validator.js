@@ -1,6 +1,35 @@
-const { body, param, validationResult } = require('express-validator');
+const { body, param, validationResult, query } = require('express-validator');
 const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
 const errors = require('../../support/errors');
+
+const getAllRules = [
+  query('filter.projectId').optional().isUUID(),
+  query('filter.workerId').optional().isUUID(),
+  query('filter.week').optional().isInt({ min: 1 }),
+  query('filter.status').optional().isString().custom((value) => {
+    if (Object.values(AcceptableStatus).indexOf(value) === -1) {
+      throw errors.BadRequest('Invalid status');
+    }
+    return true;
+  }),
+  
+  query('include')
+    .optional()
+    .custom(value => {
+      const includeValues = value.split(',');
+      const validValues = [
+        'project', 'worker'
+      ];
+
+      for (const includeValue of includeValues) {
+        if (!validValues.includes(includeValue)) {
+          throw new Error('Invalid include value');
+        }
+      }
+
+      return true;
+    })
+];
 
 const createRules = [
   body('projectId').notEmpty().isUUID(),
@@ -55,6 +84,7 @@ const validate = (req, res, next) => {
 };
 
 module.exports = {
+  getAllRules,
   createRules,
   updateRules,
   validate,
