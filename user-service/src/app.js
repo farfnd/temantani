@@ -5,10 +5,10 @@ const cors = require("cors");
 const routes = require("./interfaces/routes");
 const EventPublisher = require("./infrastructure/event-publisher.js");
 const KafkaProducer = require("./infrastructure/services/kafka-producer.js");
+const config = require('./support/config');
 
-require('dotenv').config();
-const port = process.env.PORT || 4000;
-const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
+const port = config.port;
+const kafkaBootstrapServer = config.kafkaBootstrapServer;
 
 const kafkaProducer = new KafkaProducer(kafkaBootstrapServer);
 const eventPublisher = new EventPublisher(kafkaProducer);

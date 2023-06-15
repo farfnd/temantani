@@ -63,9 +63,6 @@ class WorkReportRepository extends BaseRepository {
 
     async update(id, data, options = {}) {
         const workReport = await WorkReport.findByPk(id);
-        if (workReport.status === AcceptableStatus.ACCEPTED) {
-            throw errors.BadRequest("Work report is already accepted");
-        }
         if (data.status && AcceptableStatus.canTransition(workReport.status, data.status) === false) {
             throw errors.BadRequest("Work report status transition is not allowed");
         }

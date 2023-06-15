@@ -6,10 +6,10 @@ const kafka = require('kafka-node');
 const routes = require('./interfaces/routes');
 const KafkaProducer = require('./infrastructure/services/kafka-producer');
 const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
+const config = require('./support/config');
 
-require('dotenv').config();
-const port = process.env.PORT || 4000;
-const kafkaBootstrapServer = process.env.KAFKA_BOOTSTRAP_SERVER;
+const port = config.port;
+const kafkaBootstrapServer = config.kafkaBootstrapServer;
 
 const kafkaProducer = new KafkaProducer(kafkaBootstrapServer);
 const kafkaConsumer = new KafkaConsumer(kafkaBootstrapServer);

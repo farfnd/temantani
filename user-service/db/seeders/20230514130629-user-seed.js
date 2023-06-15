@@ -1,5 +1,5 @@
 'use strict';
-const { hashPassword } = require('../../src/utils.js');
+const { hashPassword } = require('../../src/support/helpers');
 const { v4 } = require('uuid');
 const AdminRole = require('../../src/domain/enums/AdminRole');
 const UserRole = require('../../src/domain/enums/UserRole');

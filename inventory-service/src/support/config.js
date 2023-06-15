@@ -12,4 +12,10 @@ module.exports = {
         }
     },
     jwtSecret: process.env.JWT_SECRET,
+    fileUpload: {
+        createParentPath: true,
+        limits: {
+            fileSize: 2 * 1024 * 1024 * 1024 //2MB max file(s) size
+        },
+    },
 };

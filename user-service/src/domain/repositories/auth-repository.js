@@ -1,4 +1,4 @@
-const { hashPassword, comparePassword, generateJwt } = require("../../utils.js");
+const { hashPassword, comparePassword, generateJwt } = require("../../support/helpers");
 const { User, Role, UserRole } = require("../models");
 const UserRegistered = require("../events/user-registered.js");
 const UserEventType = require("../enums/UserEventType.js");

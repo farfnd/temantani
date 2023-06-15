@@ -4,9 +4,8 @@ const app = express();
 const cors = require('cors');
 const routes = require('./interfaces/routes');
 const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
-const config = require('./support/config');
 
-require('dotenv').config();
+const config = require('./support/config');
 const port = config.port;
 const kafkaBootstrapServer = config.kafkaBootstrapServer;
 const kafkaConsumer = new KafkaConsumer(kafkaBootstrapServer);

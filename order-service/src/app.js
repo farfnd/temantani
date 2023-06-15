@@ -8,7 +8,6 @@ const KafkaProducer = require('./infrastructure/services/kafka-producer');
 const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
 const config = require('./support/config');
 
-require('dotenv').config();
 const port = config.port;
 const kafkaBootstrapServer = config.kafkaBootstrapServer;
 
