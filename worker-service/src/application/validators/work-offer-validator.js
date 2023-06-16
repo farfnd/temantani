@@ -9,6 +9,32 @@ const getAllRules = [
   query('filter.workContractAccepted').optional().isBoolean(),
 ];
 
+const getByIdRules = [
+  param('id').notEmpty().isUUID(),
+  query('filter.projectId').not().exists(),
+  query('filter.workerId').not().exists(),
+  query('filter.adminId').not().exists(),
+  query('filter.status').not().exists(),
+  query('filter.workContractAccepted').not().exists(),
+
+  query('include')
+    .optional()
+    .custom(value => {
+      const includeValues = value.split(',');
+      const validValues = [
+        'admin', 'worker', 'project',
+      ];
+
+      for (const includeValue of includeValues) {
+        if (!validValues.includes(includeValue)) {
+          throw new Error('Invalid include value');
+        }
+      }
+
+      return true;
+    })
+];
+
 const createRules = [
   body('projectId').notEmpty().isUUID(),
   body('workerId').notEmpty().isUUID(),
@@ -36,6 +62,7 @@ const validate = (req, res, next) => {
 
 module.exports = {
   getAllRules,
+  getByIdRules,
   createRules,
   updateRules,
   validate,

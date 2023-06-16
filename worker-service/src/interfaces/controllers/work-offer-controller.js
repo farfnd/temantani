@@ -1,4 +1,4 @@
-const { getAllRules, createRules, updateRules, validate } = require('../../application/validators/work-offer-validator.js');
+const { getAllRules, getByIdRules, createRules, updateRules, validate } = require('../../application/validators/work-offer-validator.js');
 const errors = require('../../support/errors');
 
 module.exports = (usecase) => {
@@ -8,11 +8,16 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
+                    let include = [];
+                    if (req.query.include) {
+                        include = req.query.include.split(',');
+                    }
+
                     let data;
                     if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                        data = await usecase.getAll({ where: req.query.filter })
+                        data = await usecase.getAll({ where: req.query.filter, include })
                     } else {
-                        data = await usecase.find({ workerId: req.user.id, ...req.query.filter });
+                        data = await usecase.find({ workerId: req.user.id, ...req.query.filter }, include);
                     }
                     res.send(data);
                 } catch (error) {
@@ -22,23 +27,33 @@ module.exports = (usecase) => {
             }
         ],
 
-        show: async (req, res) => {
-            try {
-                let data;
-                if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                    data = await usecase.getById(req.params.id);
-                } else {
-                    data = await usecase.find({ 
-                        id: req.params.id,
-                        workerId: req.user.id
-                    });
+        show: [
+            getByIdRules,
+            validate,
+            async (req, res) => {
+                try {
+                    let include = [];
+                    if (req.query.include) {
+                        include = req.query.include.split(',');
+                    }
+
+                    let data;
+                    if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                        data = await usecase.getById(req.params.id,  include);
+                    } else {
+                        data = await usecase.findOne({ 
+                            id: req.params.id,
+                            workerId: req.user.id
+                        });
+                    }
+                    res.send(data);
+                } catch (error) {
+                    res.statusCode = 500;
+                    console.log(error);
+                    res.send(error);
                 }
-                res.send(data);
-            } catch (error) {
-                res.statusCode = 500;
-                res.send(error);
             }
-        },
+        ],
 
         store: [
             createRules,
