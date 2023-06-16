@@ -7,9 +7,9 @@ const OrderStatus = require('../enums/OrderStatus');
 module.exports = (sequelize, DataTypes) => {
   class Order extends Model {
     static associate(models) {
-      Order.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-      Order.belongsTo(models.Address, { foreignKey: 'addressId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-      Order.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Order.belongsTo(models.User, { foreignKey: 'userId', onDelete: 'CASCADE', onUpdate: 'CASCADE', as: 'user' });
+      Order.belongsTo(models.Address, { foreignKey: 'addressId', onDelete: 'CASCADE', onUpdate: 'CASCADE', as: 'address' });
+      Order.belongsTo(models.Product, { foreignKey: 'productId', onDelete: 'CASCADE', onUpdate: 'CASCADE', as: 'product' });
     }
   }
 

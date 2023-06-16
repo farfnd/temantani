@@ -2,23 +2,32 @@ const midtrans = require('../../infrastructure/midtrans');
 const config = require('../../support/config');
 const { verifySHA512 } = require('../../support/helpers');
 const { sequelize } = require('../../domain/models');
+const { getAllRules, getByIdRules, validate } = require('../../application/validators/order-validator.js');
 
 module.exports = (usecase) => {
     const controller = {
-        index: async (req, res) => {
-            try {
-                let data;
-                if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                    data = await usecase.getAll();
-                } else {
-                    data = await usecase.find({ userId: req.user.id });
+        index: [
+            getAllRules,
+            validate,
+            async (req, res) => {
+                try {
+                    let include = [];
+                    if (req.query.include) {
+                        include = req.query.include.split(',');
+                    }
+
+                    let data;
+                    if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                        data = await usecase.getAll({ where: req.query.filter, include })
+                    } else {
+                        data = await usecase.find({ userId: req.user.id, ...req.query.filter }, include);
+                    }
+                    return res.send(data);
+                } catch (error) {
+                    return res.status(500).send(error)
                 }
-                if(data.length === 0) return res.status(404).json('Data is empty');
-                return res.send(data)
-            } catch (error) {
-                return res.status(500).send(error)
             }
-        },
+        ],
 
         show: async (req, res) => {
             try {
@@ -78,7 +87,8 @@ module.exports = (usecase) => {
                     message: "success"
                 })
             } catch (error) {
-                res.status(500).json(error)
+                console.log(error)
+                res.status(error.status).json(error)
             }
         },
 

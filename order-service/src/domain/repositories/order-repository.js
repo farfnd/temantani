@@ -64,7 +64,7 @@ class OrderRepository extends BaseRepository {
         }
 
         const orderStatus = data.orderStatus;
-        if (orderStatus && order.orderStatus !== OrderStatus.PENDING) {
+        if (orderStatus && OrderStatus.canTransition(order.orderStatus, orderStatus) === false) {
             throw errors.BadRequest('Order status cannot be changed');
         }
 
