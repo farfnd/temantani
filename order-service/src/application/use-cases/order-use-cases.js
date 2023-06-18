@@ -1,25 +1,31 @@
 const AbstractUseCase = require('./abstracts/base-use-cases');
-const moment = require('moment');
 const OrderStatus = require('../../domain/enums/OrderStatus');
 const errors = require('../../support/errors');
-const config = require('../../support/config');
+const OrderService = require('../../domain/services/order-service');
 
 class OrderUseCase extends AbstractUseCase {
     constructor(repository) {
         super(repository);
     }
 
-    async paymentPaid(orderId, transactionId, grossAmount, paymentType) {
-        const order = await this.repository.getById(orderId);
-        if (!order) throw errors.NotFound('Order payment is expired');
-
-        const currentTime = moment();
-        const expiryTime = moment(order.createdAt).add(config.midtrans.expiry.duration, config.midtrans.expiry.unit);
-
-        if (currentTime.isAfter(expiryTime)) {
-            throw errors.BadRequest('Order payment is expired');
+    async update(id, data, options = {}) {
+        if (! (
+            await OrderService.verifyOrderExists(id)
+            && await OrderService.isTransitionAllowed(id, data.status)
+        )) {
+            return;
         }
+        return super.update(id, data, options);
+    }
 
+    async paymentPaid(orderId, transactionId, grossAmount, paymentType) {
+        if(! (
+            await OrderService.verifyOrderExists(orderId)
+            && await OrderService.isTransitionAllowed(orderId, OrderStatus.PAID)
+            && await OrderService.isOrderNotExpired(orderId)
+        )) {
+            return;
+        }
         try {
             await this.repository.update(orderId, {
                 transactionId,

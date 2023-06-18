@@ -2,14 +2,7 @@ const axios = require('axios');
 const config = require('../support/config');
 
 class DistanceService {
-    constructor(address) {
-        // Initialize the address and destination
-        this.address = {
-            subdistrict: address.subdistrict,
-            district: address.district,
-            city: address.city,
-            postalCode: address.postalCode,
-        };
+    constructor() {
         this.origin = {
             subdistrict: 'Keputih',
             district: 'Sukolilo',
@@ -19,8 +12,8 @@ class DistanceService {
         this.apiKey = config.googleMapsApiKey;
     }
 
-    getDistance() {
-        const destination = `${this.address.subdistrict}, ${this.address.district}, ${this.address.city}, ${this.address.postalCode}`;
+    getDistance(address) {
+        const destination = `${address.subdistrict}, ${address.district}, ${address.city}, ${address.postalCode}`;
         const origin = `${this.origin.subdistrict}, ${this.origin.district}, ${this.origin.city}, ${this.origin.postalCode}`;
         const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${destination}&destinations=${origin}&units=metric&key=${this.apiKey}`;
 

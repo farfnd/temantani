@@ -1,4 +1,6 @@
 const EventPublisher = require("../../infrastructure/event-publisher.js");
+const PaymentGatewayService = require("../../infrastructure/midtrans.js");
+const DistanceService = require("../../infrastructure/distance.js");
 const middlewares = require('../../application/middlewares');
 
 const publicRoutes = require('./public-routes.js');
@@ -12,8 +14,10 @@ const productDependency = require('../dependencies/product-dependency.js');
 
 module.exports = function (app, producer) {
     const eventPublisher = new EventPublisher(producer);
+    const distanceService = new DistanceService();
+    const midtransService = new PaymentGatewayService(distanceService);
     const controllers = {
-        orderController: orderDependency(eventPublisher),
+        orderController: orderDependency(eventPublisher, midtransService),
         addressController: addressDependency(),
         productController: productDependency()
     }

@@ -1,17 +1,14 @@
-const midtrans = require('../../infrastructure/midtrans');
-const config = require('../../support/config');
-const { verifySHA512 } = require('../../support/helpers');
 const { sequelize } = require('../../domain/models');
 const { getAllRules, getByIdRules, validate } = require('../../application/validators/order-validator.js');
 
-module.exports = (usecase) => {
+module.exports = (usecase, paymentGatewayService) => {
     const controller = {
         index: [
             getAllRules,
             validate,
             async (req, res) => {
                 try {
-                    let include = [];
+                    let include = {};
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
@@ -57,9 +54,8 @@ module.exports = (usecase) => {
                     // Create the order within the transaction
                     const createdOrder = await usecase.create(req.body);
                     
-                    const midtransService = new midtrans();
-                    const transactionData = await midtransService.createTransactionToken(createdOrder);
-                    console.log('transaction:',transactionData);
+                    const transactionData = await paymentGatewayService.createTransactionToken(createdOrder);
+                    console.log('transaction: ',transactionData);
 
                     await t.commit();
 
@@ -121,9 +117,7 @@ module.exports = (usecase) => {
                 })
             }
 
-            const serverKey = config.midtrans.serverKey;
-            const check = order_id + status_code + gross_amount + serverKey;
-            if (verifySHA512(signature_key, check)) {
+            if (paymentGatewayService.verifySignature(signature_key, req.body)) {
                 const t = await sequelize.transaction();
 
                 try {

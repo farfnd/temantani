@@ -5,6 +5,7 @@ const OrderPaid = require('../events/order-paid');
 const OrderStatus = require("../enums/OrderStatus");
 const ProductStatus = require("../enums/ProductStatus");
 const errors = require('../../support/errors');
+const OrderCancelled = require('../events/order-cancelled');
 
 class OrderRepository extends BaseRepository {
     constructor(eventPublisher) {
@@ -43,7 +44,7 @@ class OrderRepository extends BaseRepository {
 
         let order;
         try {
-            order = await Order.findByPk(createdOrder.id, { include: [Address, User] });
+            order = await Order.findByPk(createdOrder.id, { include: ['address','user'] });
         } catch (error) {
             throw error;
         }
@@ -70,11 +71,17 @@ class OrderRepository extends BaseRepository {
 
         await super.update(id, data, options);
         
-        if (orderStatus === OrderStatus.PAID && this.eventPublisher) {
-            order = await Order.findByPk(id, { include: [Product, Address, User] });
-            const orderEvent = new OrderPaid(order);
+        let orderEvent;
+        if (orderStatus === OrderStatus.PAID) {
+            orderEvent = new OrderPaid(order);
+        } else if (orderStatus === OrderStatus.CANCELLED) {
+            orderEvent = new OrderCancelled(order);
+        }
+
+        if (orderEvent && this.eventPublisher) {
             this.eventPublisher.publish(orderEvent);
         }
+        return order;
     }
 }
 

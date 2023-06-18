@@ -9,13 +9,13 @@ class OrderPaid {
             paymentMethod: order.paymentMethod,
             paymentAmount: order.paymentAmount,
             orderDetails: [
-                ...this.createItemDetails(order.Product, order),
+                ...this.createItemDetails(order.product, order),
                 ...this.createShippingFeeItem(order)
             ],
             customerDetails: {
-                ...this.createCustomerDetails(order.User),
+                ...this.createCustomerDetails(order.user),
             },
-            shippingDetails: this.createShippingAddress(order.Address),
+            shippingDetails: this.createShippingAddress(order.address),
         };
     }
 

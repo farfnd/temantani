@@ -1,9 +1,13 @@
 const config = require('../support/config');
 const midtransClient = require('midtrans-client');
 const moment = require('moment');
-const DistanceService = require('./distance');
+const crypto = require('crypto');
 
 class MidtransService {
+    constructor(distanceService) {
+        this.distanceService = distanceService;
+    }
+
     createItemDetails(product, order) {
         return [{
             id: product.id,
@@ -15,9 +19,9 @@ class MidtransService {
 
     createCustomerDetails(user) {
         return {
-            firstName: user.name,
+            first_name: user.name,
             email: user.email,
-            phoneNumber: user.phoneNumber
+            phone: user.phoneNumber
         };
     }
 
@@ -32,10 +36,10 @@ class MidtransService {
 
     createShippingAddress(address) {
         return {
-            firstName: address.name,
+            first_name: address.name,
             address: address.address,
             city: address.city,
-            postalCode: address.postalCode,
+            postal_code: address.postalCode,
             phone: address.phoneNumber,
         };
     }
@@ -46,9 +50,7 @@ class MidtransService {
             const user = await order.getUser();
             const address = await order.getAddress();
 
-            // Calculate the distance
-            const distanceService = new DistanceService(address);
-            const distance = await distanceService.getDistance(); // in meter
+            const distance = await this.distanceService.getDistance(address);
 
             // Calculate the shipping cost
             const shippingCost = config.shippingCost.base
@@ -60,10 +62,10 @@ class MidtransService {
 
             // Update the order
             order.shippingCost = shippingCost;
-            
+
             let snap = new midtransClient.Snap({
-                isProduction : config.env === 'production',
-                serverKey : config.midtrans.serverKey
+                isProduction: config.env === 'production',
+                serverKey: config.midtrans.serverKey
             });
 
             let parameter = {
@@ -99,10 +101,17 @@ class MidtransService {
                         reject(new Error(`Failed to create transaction: ${e.message}`));
                     });
             });
-            
+
         } catch (error) {
             throw new Error(`Failed to create transaction: ${error.message}`);
         }
+    }
+
+    verifySignature(signatureKey, body) {
+        const serverKey = config.midtrans.serverKey;
+        const check = body.order_id + body.status_code + body.gross_amount + serverKey;
+
+        return signatureKey === crypto.createHash('sha512').update(check).digest('hex');
     }
 }
 
