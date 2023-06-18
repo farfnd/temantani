@@ -1,13 +1,13 @@
-// KafkaConsumer.js
 const Kafka = require('../kafka');
 const handlers = require('../../interfaces/event-handlers');
+const config = require('../../support/config');
 
 class KafkaConsumer {
     constructor(bootstrapServer) {
         this.kafka = new Kafka(bootstrapServer);
         this.topicToHandlerMap = {
-            'user-topic': handlers.userTopicHandler,
-            'product-topic': handlers.productTopicHandler,
+            [config.kafka.consumer.topic.user]: handlers.userHandler,
+            [config.kafka.consumer.topic.product]: handlers.productTopicHandler,
         };
     }
 

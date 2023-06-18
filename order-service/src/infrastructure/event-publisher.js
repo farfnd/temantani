@@ -1,15 +1,17 @@
+const config = require('../support/config');
+
 class EventPublisher {
-    constructor(kafkaService) {
-        this.kafkaService = kafkaService;
+    constructor(producer) {
+        this.producer = producer;
         this.topicMapping = {
-            OrderCreated: 'order-topic',
-            OrderPaid: 'order-topic',
-            OrderCancelled: 'order-topic',
+            OrderCreated: config.kafka.producer.topic.order,
+            OrderPaid: config.kafka.producer.topic.order,
+            OrderCancelled: config.kafka.producer.topic.order,
         };
     }
 
     async publish(event) {
-        console.log("Publishing event to Kafka");
+        console.log("Publishing event");
         const message = JSON.stringify(event);
 
         try {
@@ -19,7 +21,7 @@ class EventPublisher {
                 throw new Error(`No topic mapping found for event: ${event.constructor.name}`);
             }
 
-            this.kafkaService.publishMessage(topic, message);
+            this.producer.publishMessage(topic, message);
             console.log("Event published successfully");
         } catch (error) {
             console.error("Error publishing event:", error);
