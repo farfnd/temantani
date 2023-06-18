@@ -1,10 +1,23 @@
 const { body, param, validationResult, query } = require('express-validator');
+const errors = require('../../support/errors');
 const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
+const WorkerAdminRole = require('../../domain/enums/WorkerAdminRole');
 
 const getAllRules = [
   query('filter.projectId').optional().isUUID(),
   query('filter.workerId').optional().isUUID(),
-  query('filter.adminId').not().exists(),
+
+  query('filter.adminId')
+    .optional()
+    .custom((value, { req }) => {
+      if (req.user.roles.includes(WorkerAdminRole.SUPER)) {
+        return true;
+      } else {
+        throw errors.BadRequest('This action is not allowed for your role');
+      }
+    })
+    .isUUID(),
+
   query('filter.status').optional().isIn(Object.values(AcceptableStatus)),
   query('filter.workContractAccepted').optional().isBoolean(),
 ];

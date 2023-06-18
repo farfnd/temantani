@@ -25,7 +25,7 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = [];
+                    let include = {};
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
@@ -55,14 +55,14 @@ module.exports = (usecase) => {
 
         update: async (req, res) => {
             try {
-                if (req.body.password) {
-                    req.body.password = hashPassword(req.body.password);
-                }
-                await usecase.update(req.params.id, req.body);
+                await usecase.update(req.user.id, req.body);
+                const data = await usecase.getById(req.user.id);
                 res.status(200).json({
+                    data,
                     message: "success",
                 });
             } catch (error) {
+                console.log(error);
                 res.status(500).json(error);
             }
         },

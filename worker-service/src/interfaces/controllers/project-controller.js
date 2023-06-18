@@ -22,7 +22,7 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = [];
+                    let include = {};
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }

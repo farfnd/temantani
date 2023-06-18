@@ -4,7 +4,7 @@ const router = Router();
 
 module.exports = (app, controller) => {
     router.get("/", controller.getCurrentWorker);
-    router.put("/", controller.update);
+    router.patch("/", controller.update);
 
     app.use("/me", router);
 };

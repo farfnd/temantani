@@ -8,20 +8,22 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = [];
+                    let include = {};
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
 
                     let data;
                     if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                        data = await usecase.getAll({ where: req.query.filter, include })
+                        data = await usecase.getAll({ where: req.query.filter }, include)
                     } else {
-                        data = await usecase.find({ workerId: req.user.id, ...req.query.filter }, include);
+                        console.log(include);
+                        data = await usecase.find({ workerId: req.user.id, ...req.query.filter }, { include });
                     }
                     res.send(data);
                 } catch (error) {
                     res.statusCode = 500;
+                    console.log(error);
                     res.send(error);
                 }
             }
@@ -32,19 +34,19 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = [];
+                    let include = {};
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
 
                     let data;
                     if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                        data = await usecase.getById(req.params.id,  include);
+                        data = await usecase.getById(req.params.id, { include });
                     } else {
-                        data = await usecase.findOne({ 
+                        data = await usecase.findOne({
                             id: req.params.id,
                             workerId: req.user.id
-                        });
+                        }, { include });
                     }
                     res.send(data);
                 } catch (error) {
@@ -60,7 +62,7 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    if(req.body.adminId && req.body.adminId !== req.user.id) {
+                    if (req.body.adminId && req.body.adminId !== req.user.id) {
                         throw errors.BadRequest("Admin ID does not match with the logged in user");
                     }
 
@@ -71,7 +73,7 @@ module.exports = (usecase) => {
                         status: req.body.status,
                         workContractAccepted: req.body.workContractAccepted,
                     };
-                    
+
                     const data = await usecase.create(body);
                     res.status(200).json({
                         data,

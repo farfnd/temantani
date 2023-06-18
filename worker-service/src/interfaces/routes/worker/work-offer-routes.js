@@ -5,7 +5,7 @@ const router = Router();
 module.exports = (app, controller) => {
     router.get("/", controller.index);
     router.get("/:id", controller.show);
-    router.put("/:id", controller.update);
+    router.patch("/:id", controller.update);
 
     app.use("/work-offers", router);
 };
