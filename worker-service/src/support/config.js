@@ -15,4 +15,10 @@ module.exports = {
         landService: process.env.LAND_SERVICE_URL || 'http://localhost:4000',
         userService: process.env.USER_SERVICE_URL || 'http://localhost:4000',
     },
+    fileUpload: {
+        createParentPath: true,
+        limits: {
+            fileSize: 2 * 1024 * 1024 * 1024 //2MB max file(s) size
+        },
+    },
 };

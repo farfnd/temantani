@@ -14,10 +14,10 @@ class WorkReportUseCase extends AbstractUseCase {
         const { projectId, workerId, week } = data;
 
         if (! (
-            await ProjectService.verifyProjectStatus(projectId, ProjectStatus.ONGOING)
-            && await WorkerService.verifyWorker(workerId)
+            await WorkerService.verifyWorkerExists(workerId)
+            && await ProjectService.verifyProjectStatus(projectId, ProjectStatus.ONGOING)
             && await ProjectService.isWorkerAssignedToProject(projectId, workerId)
-            && await WorkReportService.isWorkReportExistsForWeek(projectId, workerId, week)
+            && await WorkReportService.isWorkReportNotExistsForWeek(projectId, workerId, week)
         )) {
             return;
         }
@@ -27,7 +27,7 @@ class WorkReportUseCase extends AbstractUseCase {
     }
 
     async update(id, data, options = {}) {
-        if (! (await WorkReportService.isTransitionAllowed(id, data.status))) {
+        if (data.status && ! (await WorkReportService.isTransitionAllowed(id, data.status))) {
             return;
         }
         return super.update(id, data, options);

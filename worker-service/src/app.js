@@ -2,7 +2,8 @@ const express = require('express');
 const { json } = require('express');
 const app = express();
 const cors = require('cors');
-const kafka = require('kafka-node');
+const fileUpload = require("express-fileupload");
+const path = require("path");
 const routes = require('./interfaces/routes');
 const KafkaProducer = require('./infrastructure/services/kafka-producer');
 const KafkaConsumer = require('./infrastructure/services/kafka-consumer');
@@ -16,6 +17,9 @@ const kafkaConsumer = new KafkaConsumer(kafkaBootstrapServer);
 
 app.use(cors());
 app.use(json());
+app.use(fileUpload(config.fileUpload));
+app.use(express.static(path.join(__dirname, '../public')));
+
 app.get('/', (req, res) => {
   res.send('Welcome to Worker Service');
 });

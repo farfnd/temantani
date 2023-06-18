@@ -47,11 +47,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     proof: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     verifierId: {
       type: DataTypes.UUID,
