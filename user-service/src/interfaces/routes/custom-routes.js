@@ -9,6 +9,7 @@ const userController = controllers.userController(userUseCase);
 router.use(middlewares.auth);
 
 router.get("/me", userController.getCurrentUser);
+router.put("/me", userController.updateCurrentUser);
 
 module.exports = (app) => {
     app.use('/', router);
