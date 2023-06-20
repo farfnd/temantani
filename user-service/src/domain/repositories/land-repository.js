@@ -6,7 +6,7 @@ module.exports = () => {
             return Land.findAll();
         },
         getLandById: async (id) => {
-            const land = await Land.findByPk(id);
+            const land = await Land.findByPk(id, { include: ['owner'] });
             if (!land) {
                 throw new Error(`Land with id ${id} not found`);
             }
@@ -21,9 +21,6 @@ module.exports = () => {
             });
         },
         deleteLand: async (id) => {
-            await LandRoles.destroy({
-                where: { landId: id },
-            });
             return Land.destroy({
                 where: { id },
             });

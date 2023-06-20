@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'workReports',
             foreignKey: 'workerId',
         });
+        Worker.belongsToMany(models.Skill, {
+            as: 'skills',
+            foreignKey: 'workerId',
+            through: 'WorkerSkills',
+        });
     }
   }
   Worker.init({
@@ -36,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: WorkAvailability.AVAILABLE
     },
+    description: {
+      type: DataTypes.STRING,
+    }
   }, {
     sequelize,
     modelName: 'Worker',

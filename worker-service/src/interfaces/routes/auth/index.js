@@ -8,5 +8,6 @@ module.exports = function (app) {
     app.use("/", authRouter);
     
     projectRoutes(authRouter, controllers.projectController);
+    app.get('/skills', controllers.skillController.index);
 };
 

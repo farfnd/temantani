@@ -1,4 +1,6 @@
 const { fakerID_ID: faker } = require('@faker-js/faker');
+const Sequelize = require('sequelize');
+const { User } = require('../../src/domain/models');
 
 const generate = () => {
     return {
@@ -16,6 +18,16 @@ const create = async (number = 1, attributes = {}) => {
             ...generate(),
             ...attributes,
         };
+        
+
+        if (!model.ownerId) {
+            const randomUser = await User.findOne({
+                order: [
+                    Sequelize.fn('RANDOM'),
+                ]
+            });
+            model.ownerId = randomUser.id;
+        }
 
         models.push(model);
     }

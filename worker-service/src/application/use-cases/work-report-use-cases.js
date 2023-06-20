@@ -30,6 +30,9 @@ class WorkReportUseCase extends AbstractUseCase {
         if (data.status && ! (await WorkReportService.isTransitionAllowed(id, data.status))) {
             return;
         }
+        if (data.description) {
+            data.status = AcceptableStatus.PENDING;
+        }
         return super.update(id, data, options);
     }
 

@@ -63,45 +63,48 @@ module.exports = (usecase) => {
         },
 
         updateCurrentUser: async (req, res) => {
+            console.log(req);
             try {
-                console.log(req.files);
+                let isFileUploaded = false;
+
                 if (!req.files) {
                     await usecase.updateUser(req.user.id, req.body);
-                    res.status(200).json({
-                        message: "success",
+                } else {
+                    const file = req.files.image;
+                    const fileName = `${Date.now()}-${file.name}`;
+                    const filePath = path.join(__dirname, "../../../public/images", fileName);
+
+                    await new Promise((resolve, reject) => {
+                        file.mv(filePath, (err) => {
+                            if (err) {
+                                console.log(err);
+                                reject(err);
+                            } else {
+                                resolve();
+                            }
+                        });
                     });
-                    return;
-                }
-
-                const file = req.files.image;
-                const fileName = `${Date.now()}-${file.name}`;
-                const filePath = path.join(__dirname, "../../../public/images", fileName);
-
-                file.mv(filePath, async (err) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(500).json(err);
-                        return;
-                    }
 
                     const updateData = {
                         ...req.body,
-                        profilePictureUrl: fileName
+                        profilePictureUrl: fileName,
                     };
 
                     await usecase.updateUser(req.user.id, updateData);
-                    const data = await usecase.getUserById(req.user.id);
+                    isFileUploaded = true;
+                }
 
-                    res.status(200).json({
-                        data,
-                        message: "User data updated"
-                    });
+                const data = await usecase.getUserById(req.user.id);
+
+                res.status(200).json({
+                    data,
+                    message: "User data updated",
                 });
             } catch (error) {
                 res.status(500).json(error);
             }
         },
-        
+
         deleteUserById: async (req, res) => {
             try {
                 await usecase.deleteUser(req.params.id);

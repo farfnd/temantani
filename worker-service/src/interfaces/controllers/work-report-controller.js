@@ -1,4 +1,5 @@
 const { getAllRules, createRules, updateRules, validate } = require('../../application/validators/work-report-validator.js');
+const AcceptableStatus = require('../../domain/enums/AcceptableStatus.js');
 const errors = require('../../support/errors');
 const path = require("path")
 
@@ -9,7 +10,7 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = {};
+                    let include = [];
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
@@ -22,6 +23,7 @@ module.exports = (usecase) => {
                     }
                     res.send(data);
                 } catch (error) {
+                    console.log(error)
                     res.statusCode = 500;
                     res.send(error);
                 }
@@ -56,6 +58,7 @@ module.exports = (usecase) => {
             createRules,
             validate,
             async (req, res) => {
+                console.log(req.body)
                 if (!req.files) {
                     res.status(400).json({
                         message: "No files were uploaded"
@@ -102,31 +105,27 @@ module.exports = (usecase) => {
                     if (req.user.roles.some(role => role.includes('ADMIN'))) {
                         body = {
                             status: req.body.status,
+                            verifierId: (req.body.status === AcceptableStatus.PENDING ? null : req.user.id),
+                            rejectionMessage: (req.body.status === AcceptableStatus.REJECTED ? req.body.rejectionMessage : null),
                         };
                     } else {
-                        if (!req.files) {
-                            res.status(400).json({
-                                message: "No files were uploaded"
+                        body = { description: req.body.description }
+                        if (req.files) {
+                            const file = req.files.proof
+                            const fileName = `${Date.now()}-${file.name}`
+                            const filePath = path.join(__dirname, "../../../public/images", fileName)
+                            file.mv(filePath, (err) => {
+                                if (err) {
+                                    console.log(err)
+                                    res.status(500).json(err)
+                                    return
+                                }
                             })
-                            return
+    
+                            body.proof = fileName
                         }
-                        const file = req.files.proof
-                        const fileName = `${Date.now()}-${file.name}`
-                        const filePath = path.join(__dirname, "../../../public/images", fileName)
-                        file.mv(filePath, (err) => {
-                            if (err) {
-                                console.log(err)
-                                res.status(500).json(err)
-                                return
-                            }
-                        })
-
-                        body = {
-                            description: req.body.description,
-                            proof: fileName,
-                        };
                     }
-
+                    console.log(req.params.id, body)
                     await usecase.update(req.params.id, body)
                     const data = await usecase.getById(req.params.id)
                     res.status(200).json({
@@ -134,6 +133,7 @@ module.exports = (usecase) => {
                         message: 'Work report updated',
                     });
                 } catch (error) {
+                    console.log(error)
                     res.status(error.status).json(error.message);
                 }
             },

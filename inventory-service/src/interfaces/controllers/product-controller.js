@@ -30,7 +30,6 @@ module.exports = (usecase) => {
                     })
                     return
                 }
-                console.log(req.files)
                 const file = req.files.image
                 const fileName = `${Date.now()}-${file.name}`
                 const filePath = path.join(__dirname, "../../../public/images", fileName)
@@ -63,7 +62,6 @@ module.exports = (usecase) => {
                     })
                     return
                 }
-                console.log(req.files)
                 const file = req.files.image
                 const fileName = `${Date.now()}-${file.name}`
                 const filePath = path.join(__dirname, "../../../public/images", fileName)

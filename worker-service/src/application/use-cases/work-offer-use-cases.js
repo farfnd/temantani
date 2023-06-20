@@ -4,6 +4,7 @@ const ProjectService = require('../../domain/services/project-service');
 const WorkOfferService = require('../../domain/services/work-offer-service');
 const WorkerService = require('../../domain/services/worker-service');
 const AdminService = require('../../domain/services/admin-service');
+const AcceptableStatus = require('../../domain/enums/AcceptableStatus');
 
 class WorkOfferUseCase extends AbstractUseCase {
     constructor(repository) {
@@ -43,6 +44,14 @@ class WorkOfferUseCase extends AbstractUseCase {
             return;
         }
         return super.delete(id, options);
+    }
+
+    async getActiveWorkOffer(workerId, options = {}) {
+        return this.repository.findOne({
+            workerId,
+            status: AcceptableStatus.ACCEPTED,
+            workContractAccepted: true,
+        }, options)
     }
 }
 

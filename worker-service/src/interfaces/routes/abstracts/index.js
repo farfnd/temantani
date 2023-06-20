@@ -7,6 +7,7 @@ const workerDependency = require('../../dependencies/worker-dependency.js');
 const workOfferDependency = require('../../dependencies/work-offer-dependency.js');
 const workReportDependency = require('../../dependencies/work-report-dependency.js');
 const projectDependency = require('../../dependencies/project-dependency.js');
+const skillDependency = require('../../dependencies/skill-dependency.js');
 
 const controllers = {
   adminController: adminDependency(),
@@ -14,6 +15,7 @@ const controllers = {
   workOfferController: workOfferDependency(),
   workReportController: workReportDependency(),
   projectController: projectDependency(),
+  skillController: skillDependency(),
 }
 
 module.exports = {

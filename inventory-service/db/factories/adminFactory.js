@@ -1,7 +1,9 @@
 const { fakerID_ID: faker } = require('@faker-js/faker');
+const { v4: uuidv4 } = require('uuid');
 
 const generate = () => {
     return {
+        id: uuidv4(),
         name: faker.person.fullName(),
     };
 };

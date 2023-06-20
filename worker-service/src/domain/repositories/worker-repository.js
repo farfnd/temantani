@@ -12,10 +12,9 @@ class WorkerRepository extends BaseRepository {
     async update(id, data, options = {}) {
         await super.update(id, data, options);
         const updatedUser = await this.getById(id);
-
-        if (this.eventPublisher) {
-            const userEvent = new UserEvent(UserEventType.PROFILE_UPDATED, updatedUser);
-            this.eventPublisher.publish(userEvent);
+        console.log(data);
+        if (data.skills) {
+            await updatedUser.setSkills(data.skills);
         }
     }
 }

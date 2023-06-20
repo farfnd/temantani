@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      //
+        Land.belongsTo(models.User, {
+          foreignKey: 'ownerId',
+          as: 'owner',
+        });
     }
   }
   Land.init({
@@ -22,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     postalCode: {
       type: DataTypes.STRING
+    },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Users',
+        key: 'id'
+      },
     },
   }, {
     sequelize,

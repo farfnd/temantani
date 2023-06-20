@@ -17,7 +17,6 @@ module.exports = (usecase) => {
                     if (req.user.roles.some(role => role.includes('ADMIN'))) {
                         data = await usecase.getAll({ where: req.query.filter }, include)
                     } else {
-                        console.log(include);
                         data = await usecase.find({ workerId: req.user.id, ...req.query.filter }, { include });
                     }
                     res.send(data);
@@ -56,6 +55,25 @@ module.exports = (usecase) => {
                 }
             }
         ],
+
+        showActive: async (req, res) => {
+            try {
+                let include = [];
+                if (req.query.include) {
+                    include = req.query.include.split(',');
+                }
+
+                const data = await usecase.getActiveWorkOffer(
+                    req.user.id,
+                    { include, order: [['updatedAt', 'DESC']], limit: 1 }
+                );
+                res.send(data);
+            } catch (error) {
+                res.statusCode = 500;
+                console.log(error);
+                res.send(error);
+            }
+        },
 
         store: [
             createRules,

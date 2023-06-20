@@ -62,6 +62,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       validate: { isUUID: 4 }
     },
+    rejectionMessage: {
+      type: DataTypes.STRING,
+    },
   }, {
     sequelize,
     modelName: 'WorkReport',
