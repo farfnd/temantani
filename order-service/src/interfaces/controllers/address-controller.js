@@ -61,8 +61,10 @@ module.exports = (usecase) => {
 
         destroy: async (req, res) => {
             try {
+                await usecase.update(req.params.id, {
+                    userId: null
+                })
                 const data = await usecase.getById(req.params.id)
-                await usecase.delete(req.params.id)
                 res.status(200).json({
                     data,
                     message: "Address deleted"

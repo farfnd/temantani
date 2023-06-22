@@ -47,15 +47,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     preOrderEstimatedStock: {
       type: DataTypes.INTEGER,
-      allowNull: true
     },
     preOrderEstimatedDate: {
       type: DataTypes.DATE,
-      allowNull: true
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: true
+    },
+    expiryPeriod: {
+      type: DataTypes.INTEGER,
+    },
+    expiryPeriodUnit: {
+      type: DataTypes.STRING,
     },
   }, {
     sequelize,

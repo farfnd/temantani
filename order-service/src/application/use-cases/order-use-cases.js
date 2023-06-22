@@ -29,7 +29,7 @@ class OrderUseCase extends AbstractUseCase {
         try {
             await this.repository.update(orderId, {
                 transactionId,
-                orderStatus: OrderStatus.PAID,
+                status: OrderStatus.PAID,
                 paymentMethod: paymentType,
                 paymentAmount: grossAmount
             });

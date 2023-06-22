@@ -58,23 +58,14 @@ class OrderRepository extends BaseRepository {
     }
 
     async update(id, data, options = {}) {
-        let order = await Order.findByPk(id);
-
-        if(!order) {
-            throw errors.NotFound('Order not found');
-        }
-
-        const orderStatus = data.orderStatus;
-        if (orderStatus && OrderStatus.canTransition(order.orderStatus, orderStatus) === false) {
-            throw errors.BadRequest('Order status cannot be changed');
-        }
-
         await super.update(id, data, options);
+        let order = await Order.findByPk(id);
         
+        const status = data.status;
         let orderEvent;
-        if (orderStatus === OrderStatus.PAID) {
+        if (status === OrderStatus.PAID) {
             orderEvent = new OrderPaid(order);
-        } else if (orderStatus === OrderStatus.CANCELLED) {
+        } else if (status === OrderStatus.CANCELLED) {
             orderEvent = new OrderCancelled(order);
         }
 

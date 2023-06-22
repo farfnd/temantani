@@ -8,7 +8,7 @@ module.exports = (usecase, paymentGatewayService) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = {};
+                    let include = [];
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
@@ -17,7 +17,7 @@ module.exports = (usecase, paymentGatewayService) => {
                     if (req.user.roles.some(role => role.includes('ADMIN'))) {
                         data = await usecase.getAll({ where: req.query.filter, include })
                     } else {
-                        data = await usecase.find({ userId: req.user.id, ...req.query.filter }, include);
+                        data = await usecase.find({ userId: req.user.id, ...req.query.filter }, { include });
                     }
                     return res.send(data);
                 } catch (error) {
@@ -37,7 +37,7 @@ module.exports = (usecase, paymentGatewayService) => {
                         userId: req.user.id
                     });
                 }
-                if(data.length === 0) return res.status(404).json('Order not found');
+                if (data.length === 0) return res.status(404).json('Order not found');
                 return res.send(data)
             } catch (error) {
                 return res.status(500).send(error)
@@ -53,9 +53,9 @@ module.exports = (usecase, paymentGatewayService) => {
                 try {
                     // Create the order within the transaction
                     const createdOrder = await usecase.create(req.body);
-                    
+
                     const transactionData = await paymentGatewayService.createTransactionToken(createdOrder);
-                    console.log('transaction: ',transactionData);
+                    console.log('transaction: ', transactionData);
 
                     await t.commit();
 
@@ -66,7 +66,7 @@ module.exports = (usecase, paymentGatewayService) => {
                     });
                 } catch (error) {
                     await t.rollback();
-                    console.log('error:',error);
+                    console.log('error:', error);
                     throw error;
                 }
             } catch (error) {
@@ -80,7 +80,7 @@ module.exports = (usecase, paymentGatewayService) => {
                 const data = await usecase.getById(req.params.id)
                 res.status(200).json({
                     data,
-                    message: "success"
+                    message: "Order updated"
                 })
             } catch (error) {
                 console.log(error)
@@ -94,7 +94,7 @@ module.exports = (usecase, paymentGatewayService) => {
                 await usecase.delete(req.params.id)
                 res.status(200).json({
                     data,
-                    message: "success"
+                    message: "Order deleted"
                 })
             } catch (error) {
                 res.status(500).json(error)
@@ -110,7 +110,7 @@ module.exports = (usecase, paymentGatewayService) => {
                 payment_type,
                 signature_key
             } = req.body;
-            
+
             if (status_code !== '200') {
                 return res.status(200).json({
                     message: "Order status is not updated as payment is not a success"
@@ -132,7 +132,7 @@ module.exports = (usecase, paymentGatewayService) => {
                         message: "Payment status updated"
                     })
                 } catch (error) {
-                    console.log('error:',error);
+                    console.log('error:', error);
                     return res.status(error.status).json(error.message)
                 }
             } else {

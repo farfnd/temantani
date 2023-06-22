@@ -62,6 +62,7 @@ class MidtransService {
 
             // Update the order
             order.shippingCost = shippingCost;
+            await order.save();
 
             let snap = new midtransClient.Snap({
                 isProduction: config.env === 'production',
@@ -93,7 +94,9 @@ class MidtransService {
 
             return new Promise((resolve, reject) => {
                 snap.createTransaction(parameter)
-                    .then((transaction) => {
+                    .then(async (transaction) => {
+                        order.transactionToken = transaction.token;
+                        await order.save();
                         resolve(transaction);
                     })
                     .catch((e) => {

@@ -40,22 +40,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    orderStatus: {
+    status: {
       type: DataTypes.ENUM(Object.values(OrderStatus)),
       allowNull: true,
       defaultValue: OrderStatus.PENDING,
     },
+    transactionToken: {
+      type: DataTypes.STRING,
+    },
     transactionId: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
     paymentMethod: {
       type: DataTypes.STRING,
-      allowNull: true,
     },
     paymentAmount: {
       type: DataTypes.INTEGER,
-      allowNull: true,
     }
   }, {
     sequelize,

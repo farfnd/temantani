@@ -20,6 +20,7 @@ class BaseRepository {
     }
 
     update(id, data, options = {}) {
+        console.log('update: ', id, data, options);
         return this.model.update(data, { where: { id }, ...options });
     }
 
