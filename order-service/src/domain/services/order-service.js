@@ -8,7 +8,6 @@ class OrderService {
     static async verifyOrderExists(orderId) {
         const order = await Order.findByPk(orderId);
         if (!order) {
-            console.log("Order does not exist");
             throw errors.BadRequest("Order does not exist");
         }
 
@@ -33,6 +32,7 @@ class OrderService {
         if (currentTime.isAfter(expiryTime)) {
             throw errors.BadRequest('Order payment is expired');
         }
+        return true;
     }
 }
 

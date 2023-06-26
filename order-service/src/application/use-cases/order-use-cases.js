@@ -19,14 +19,14 @@ class OrderUseCase extends AbstractUseCase {
     }
 
     async paymentPaid(orderId, transactionId, grossAmount, paymentType) {
-        if(! (
-            await OrderService.verifyOrderExists(orderId)
-            && await OrderService.isTransitionAllowed(orderId, OrderStatus.PAID)
-            && await OrderService.isOrderNotExpired(orderId)
-        )) {
-            return;
-        }
         try {
+            if(! (
+                await OrderService.verifyOrderExists(orderId)
+                && await OrderService.isTransitionAllowed(orderId, OrderStatus.PAID)
+                && await OrderService.isOrderNotExpired(orderId)
+            )) {
+                return;
+            }
             await this.repository.update(orderId, {
                 transactionId,
                 status: OrderStatus.PAID,
@@ -34,6 +34,7 @@ class OrderUseCase extends AbstractUseCase {
                 paymentAmount: grossAmount
             });
         } catch (error) {
+            console.log('error:', error);
             throw error;
         }
     }

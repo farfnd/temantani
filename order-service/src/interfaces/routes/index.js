@@ -17,7 +17,7 @@ module.exports = function (app, producer) {
     const distanceService = new DistanceService();
     const midtransService = new PaymentGatewayService(distanceService);
     const controllers = {
-        orderController: orderDependency(eventPublisher, midtransService),
+        orderController: orderDependency(eventPublisher, midtransService, distanceService),
         addressController: addressDependency(),
         productController: productDependency()
     }

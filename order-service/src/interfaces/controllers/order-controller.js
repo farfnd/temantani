@@ -1,7 +1,7 @@
 const { sequelize } = require('../../domain/models');
 const { getAllRules, getByIdRules, validate } = require('../../application/validators/order-validator.js');
 
-module.exports = (usecase, paymentGatewayService) => {
+module.exports = (usecase, paymentGatewayService, distanceService) => {
     const controller = {
         index: [
             getAllRules,
@@ -28,16 +28,21 @@ module.exports = (usecase, paymentGatewayService) => {
 
         show: async (req, res) => {
             try {
+                let include = [];
+                if (req.query.include) {
+                    include = req.query.include.split(',');
+                }
+
                 let data;
                 if (req.user.roles.some(role => role.includes('ADMIN'))) {
-                    data = await usecase.getById(req.params.id);
+                    data = await usecase.getById(req.params.id, { include });
                 } else {
                     data = await usecase.find({
                         id: req.params.id,
                         userId: req.user.id
-                    });
+                    }, { include });
                 }
-                if (data.length === 0) return res.status(404).json('Order not found');
+                if (data.length === 0) return res.status(200).json('Order not found');
                 return res.send(data)
             } catch (error) {
                 return res.status(500).send(error)
@@ -84,7 +89,7 @@ module.exports = (usecase, paymentGatewayService) => {
                 })
             } catch (error) {
                 console.log(error)
-                res.status(error.status).json(error)
+                res.status(error.status).json(error.message)
             }
         },
 
@@ -139,6 +144,19 @@ module.exports = (usecase, paymentGatewayService) => {
                 return res.status(400).json({
                     message: 'Invalid signature'
                 });
+            }
+        },
+        
+        getDistance: async (req, res) => {
+            try {
+                const data = await distanceService.getDistanceByQuery(req.query.destination, req.query.origin);
+                res.status(200).json({
+                    data,
+                    message: "Distance calculated"
+                })
+            } catch (error) {
+                console.log(error)
+                res.status(error.status).json(error.message)
             }
         }
     };
