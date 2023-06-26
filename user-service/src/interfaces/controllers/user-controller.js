@@ -84,6 +84,10 @@ module.exports = (usecase) => {
                         });
                     });
 
+                    if (req.body.password) {
+                        req.body.password = hashPassword(req.body.password);
+                    }
+
                     const updateData = {
                         ...req.body,
                         profilePictureUrl: fileName,
