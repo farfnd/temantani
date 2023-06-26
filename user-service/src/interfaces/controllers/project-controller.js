@@ -19,7 +19,6 @@ module.exports = (usecase) => {
             try {
                 let include = [];
                 if (req.query.include) {
-                    console.log(req.query.include);
                     include = req.query.include.split(',');
                 }
 

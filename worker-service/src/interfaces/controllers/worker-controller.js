@@ -11,7 +11,6 @@ module.exports = (usecase) => {
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
-                    console.log(req.query.filter)
                     const data = await usecase.getAll({ where: req.query.filter, include })
                     res.send(data);
                 } catch (error) {
@@ -27,7 +26,7 @@ module.exports = (usecase) => {
             validate,
             async (req, res) => {
                 try {
-                    let include = {};
+                    let include = [];
                     if (req.query.include) {
                         include = req.query.include.split(',');
                     }
@@ -63,7 +62,6 @@ module.exports = (usecase) => {
 
         update: async (req, res) => {
             try {
-                console.log(req.body);
                 await usecase.update(req.user.id, req.body);
                 let include = [];
                 if (req.body.skills) {

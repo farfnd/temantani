@@ -63,7 +63,6 @@ module.exports = (usecase) => {
         },
 
         updateCurrentUser: async (req, res) => {
-            console.log(req);
             try {
                 let isFileUploaded = false;
 

@@ -32,7 +32,7 @@ module.exports = (usecase) => {
 
         show: async (req, res) => {
             try {
-                let include = {};
+                let include = [];
                 if (req.query.include) {
                     include = req.query.include.split(',');
                 }
@@ -58,7 +58,6 @@ module.exports = (usecase) => {
             createRules,
             validate,
             async (req, res) => {
-                console.log(req.body)
                 if (!req.files) {
                     res.status(400).json({
                         message: "No files were uploaded"
@@ -125,7 +124,6 @@ module.exports = (usecase) => {
                             body.proof = fileName
                         }
                     }
-                    console.log(req.params.id, body)
                     await usecase.update(req.params.id, body)
                     const data = await usecase.getById(req.params.id)
                     res.status(200).json({

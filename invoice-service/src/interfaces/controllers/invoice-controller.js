@@ -2,7 +2,12 @@ module.exports = (usecase) => {
     const controller = {
         index: async (_, res) => {
             try {
-                const data = await usecase.getAll()
+                let data;
+                if (req.user.roles.some(role => role.includes('ADMIN'))) {
+                    data = await usecase.getAll({ where: req.query.filter })
+                } else {
+                    data = await usecase.find({ userId: req.user.id, ...req.query.filter });
+                }
                 res.send(data)
             } catch (error) {
                 res.statusCode = 500
@@ -12,7 +17,9 @@ module.exports = (usecase) => {
 
         show: async (req, res) => {
             try {
-                const data = await usecase.getById(req.params.id)
+                const data = await usecase.findOne({
+                    orderId: req.params.id
+                })
                 res.send(data)
             } catch (error) {
                 res.statusCode = 500

@@ -14,6 +14,10 @@ class AbstractUseCase {
     find(query, options = {}) {
         return this.repository.find(query, options);
     }
+    
+    findOne(query, options = {}) {
+        return this.repository.findOne(query, options);
+    }
 
     create(data, options = {}) {
         return this.repository.create(data, options);

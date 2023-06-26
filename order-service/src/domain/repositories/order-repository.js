@@ -44,7 +44,7 @@ class OrderRepository extends BaseRepository {
 
         let order;
         try {
-            order = await Order.findByPk(createdOrder.id, { include: ['address','user'] });
+            order = await Order.findByPk(createdOrder.id);
         } catch (error) {
             throw error;
         }
@@ -59,7 +59,7 @@ class OrderRepository extends BaseRepository {
 
     async update(id, data, options = {}) {
         await super.update(id, data, options);
-        let order = await Order.findByPk(id);
+        let order = await Order.findByPk(id, { include: ['product', 'address','user'] });
         
         const status = data.status;
         let orderEvent;

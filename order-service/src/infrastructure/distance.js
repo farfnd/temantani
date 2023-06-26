@@ -27,6 +27,20 @@ class DistanceService {
                 throw new Error('Failed to fetch distance data');
             });
     }
+
+    getDistanceByQuery(origin, destination) {
+        const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&units=metric&key=${this.apiKey}`;
+
+        return axios.get(url)
+            .then(response => {
+                const distance = response.data.rows[0].elements[0].distance.value;
+                return distance;
+            })
+            .catch(error => {
+                console.error(error);
+                // throw new Error('Failed to fetch distance data');
+            });
+    }
 }
 
 module.exports = DistanceService;
