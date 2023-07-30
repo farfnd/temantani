@@ -11,6 +11,9 @@ async function handle(message) {
         case UserEventType.ROLE_ACTIVATED:
             await handleNewUser(message);
             break;
+        case UserEventType.PROFILE_UPDATED:
+            await handleUpdateUser(message);
+            break;
     
         default:
             break;
@@ -68,6 +71,37 @@ async function handleNewWorker(message) {
         console.log('New worker created');
     } catch (error) {
         console.error('Error creating worker from message:', error);
+        return;
+    }
+}
+
+async function handleUpdateUser(message) {
+    const userRoles = message.roles.split(',');
+
+    const hasAdminRole = userRoles.some((role) => {
+        return Object.values(WorkerAdminRole).includes(role.trim());
+    });
+
+    delete message.roles;
+
+    const userId = message.userId;
+    delete message.userId;
+
+    let repo;
+    let useCase;
+    if (hasAdminRole) {
+        repo = new repositories.AdminRepository();
+        useCase = useCases.adminUseCases(repo);
+    } else {
+        repo = new repositories.WorkerRepository();
+        useCase = useCases.workerUseCases(repo);
+    }
+
+    try {
+        await useCase.update(userId, message);
+        console.log('User updated');
+    } catch (error) {
+        console.error('Error updating user from message:', error);
         return;
     }
 }

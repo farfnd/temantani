@@ -1,6 +1,7 @@
 {
-  "name": "user-service",
+  "name": "worker-service",
   "version": "1.0.0",
+  "description": "TemanTani Worker Service",
   "main": "./src/app.js",
   "author": "FARHAN",
   "license": "MIT",

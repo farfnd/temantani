@@ -6,7 +6,7 @@ class KafkaConsumer {
     constructor(bootstrapServer) {
         this.kafka = new Kafka(bootstrapServer);
         this.topicToHandlerMap = {
-            [config.kafka.consumer.topic.user]: handlers.userHandler,
+            [config.kafka.consumer.topic.user]: handlers.userTopicHandler,
             [config.kafka.consumer.topic.product]: handlers.productTopicHandler,
         };
     }

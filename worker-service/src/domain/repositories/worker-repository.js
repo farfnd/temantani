@@ -12,7 +12,6 @@ class WorkerRepository extends BaseRepository {
     async update(id, data, options = {}) {
         await super.update(id, data, options);
         const updatedUser = await this.getById(id);
-        console.log(data);
         if (data.skills) {
             await updatedUser.setSkills(data.skills);
         }

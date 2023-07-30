@@ -49,20 +49,22 @@ class MidtransService {
             const product = await order.getProduct();
             const user = await order.getUser();
             const address = await order.getAddress();
+            
+            if (!order.shippingCost) {
+                const distance = await this.distanceService.getDistance(address);
 
-            const distance = await this.distanceService.getDistance(address);
+                // Calculate the shipping cost
+                const shippingCost = config.shippingCost.base
+                    + config.shippingCost.perKmUnder10Km * Math.ceil(distance / 1000)
+                    + (distance > 10000
+                        ? config.shippingCost.perKmAbove10Km * Math.ceil((distance - 10000) / 1000)
+                        : 0
+                    );
 
-            // Calculate the shipping cost
-            const shippingCost = config.shippingCost.base
-                + config.shippingCost.perKmUnder10Km * Math.ceil(distance / 1000)
-                + (distance > 10000
-                    ? config.shippingCost.perKmAbove10Km * Math.ceil((distance - 10000) / 1000)
-                    : 0
-                );
-
-            // Update the order
-            order.shippingCost = shippingCost;
-            await order.save();
+                // Update the order
+                order.shippingCost = shippingCost;
+                await order.save();
+            }
 
             let snap = new midtransClient.Snap({
                 isProduction: config.env === 'production',
